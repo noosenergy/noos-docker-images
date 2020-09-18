@@ -61,17 +61,17 @@ jobs:
 # Pipeline workflow
 # -----------------
 
-workflows:
-
-  version: 2
-
-  build:
-    jobs:
-      - build-dbbackup:
-          filters:
-            branches:
-              only: master
-      - build-jupyter:
-          filters:
-            branches:
-              only: master
+#workflows:
+#
+#  version: 2
+#
+#  build:
+#    jobs:
+#      - build-dbbackup:
+#          filters:
+#            branches:
+#              only: master
+#      - build-jupyter:
+#          filters:
+#            branches:
+#              only: master

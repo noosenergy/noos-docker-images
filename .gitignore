@@ -1,11 +1,11 @@
-## Dotenv
-#.env
-#
-## IDE
-#.idea
-#.vscode
-#
-## MacOS
-#.DS_Store
-#.localized
-#*~
+# Dotenv
+.env
+
+# IDE
+.idea
+.vscode
+
+# MacOS
+.DS_Store
+.localized
+*~

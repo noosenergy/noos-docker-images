@@ -21,7 +21,7 @@ commands:
   build_push_image:
     steps:
       - setup_remote_docker:
-          docker_layer_caching: true
+          docker_layer_caching: false
       - run:
           name: Build and tag Docker images
           command: |

@@ -5,3 +5,6 @@ Developer tools for working with the Kubernetes platform.
 
 ## Quickstart
 To install the stack via `docker-compose` on a Mac.
+
+### Clone the repositories
+Copy the codebase for:

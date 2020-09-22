@@ -36,7 +36,7 @@ docker-tag:  ## Tag docker image for specified COMPONENT for upload
 
 docker-login:  # Login to docker hub image repository
 	# https://hub.docker.com/u/noosenergy/
-	docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+	docker login -u ${DOCKER_HUB_USER} --password-stdin ${DOCKER_HUB_TOKEN}
 
 docker-push:  ## Push docker image for specified COMPONENT
 	docker push noosenergy/${COMPONENT}:${IMAGE_TAG}

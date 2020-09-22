@@ -71,9 +71,9 @@ workflows:
           context: DOCKER_SHARED
           filters:
             branches:
-              only: master
+              only: test/circle-ci-workflow
       - build-jupyter:
           context: DOCKER_SHARED
           filters:
             branches:
-              only: master
+              only: test/circle-ci-workflow

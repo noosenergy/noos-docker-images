@@ -1,0 +1,11 @@
+name: base
+dependencies:
+  - xeus-python
+  - matplotlib
+  - plotly
+  - voila
+  - dask_labextension
+  - ipywidgets
+  - jupyterlab-git
+channels:
+  - conda-forge

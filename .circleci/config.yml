@@ -1,4 +1,4 @@
-# https://circleci.com/docs/2.1/language-python/
+---
 version: 2.1
 
 # ------------------
@@ -63,17 +63,15 @@ jobs:
 
 workflows:
 
-  version: 2
-
   build:
     jobs:
       - build-dbbackup:
-          context: DOCKER_SHARED
+          context: CIRCLECI_SHARED
           filters:
             branches:
               only: master
       - build-jupyter:
-          context: DOCKER_SHARED
+          context: CIRCLECI_SHARED
           filters:
             branches:
               only: master

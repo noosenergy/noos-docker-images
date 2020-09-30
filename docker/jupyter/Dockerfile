@@ -63,7 +63,7 @@ RUN jupyter labextension install @jupyter-voila/jupyterlab-preview --no-build
 # https://github.com/dask/dask-labextension
 # https://www.npmjs.com/package/dask-labextension
 RUN jupyter labextension install dask-labextension --no-build && \
-    jupyter serverextension enable dask_labextension --py --sys-prefix
+    jupyter serverextension enable dask_labextension
 
 # Install ipywidgets
 # -------------------
@@ -76,7 +76,7 @@ RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
 # https://github.com/jupyterlab/jupyterlab-git
 # https://www.npmjs.com/package/@jupyterlab/git
 RUN jupyter labextension install @jupyterlab/git --no-build && \
-    jupyter serverextension enable jupyterlab_git --py --sys-prefix
+    jupyter serverextension enable jupyterlab_git
 
 # TODO: investigate compatibility with Jupyter Lab > 2.0
 # Install jupyterlab-sql

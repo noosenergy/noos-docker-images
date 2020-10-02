@@ -63,6 +63,7 @@ RUN jupyter labextension install @jupyter-voila/jupyterlab-preview --no-build
 # https://github.com/dask/dask-labextension
 # https://www.npmjs.com/package/dask-labextension
 RUN jupyter labextension install dask-labextension --no-build && \
+    jupyter labextension install @jupyterlab/server-proxy --no-build && \
     jupyter serverextension enable dask_labextension
 
 # Install ipywidgets

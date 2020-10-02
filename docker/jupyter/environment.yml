@@ -4,7 +4,8 @@ dependencies:
   - matplotlib
   - plotly
   - voila
-  - dask_labextension
+  - dask-labextension
+  - jupyter-server-proxy
   - ipywidgets
   - jupyterlab-git
 channels:

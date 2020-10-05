@@ -89,6 +89,14 @@ RUN jupyter labextension install @jupyterlab/git --no-build && \
 #     jupyter labextension install /tmp/hub/jupyterlab-sql --no-build && \
 #     jupyter serverextension enable jupyterlab_sql --py --sys-prefix
 
+# Configure hub extensions
+# ------------------------
+# https://jupyterlab.readthedocs.io/en/stable/user/extensions.html#settings
+export JUPYTERLAB_DIR = ${CONDA_DIR}/share/jupyter/lab
+COPY settings/build_config.json $JUPYTERLAB_DIR
+COPY settings/page_config.json $JUPYTERLAB_DIR
+COPY settings/overrides.json $JUPYTERLAB_DIR
+
 # Build all extensions
 # --------------------
 ARG NODE_OPTIONS=--max-old-space-size=4096

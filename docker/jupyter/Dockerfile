@@ -62,7 +62,8 @@ RUN jupyter labextension install @jupyter-voila/jupyterlab-preview --no-build
 # ------------
 # https://github.com/dask/dask-labextension
 # https://www.npmjs.com/package/dask-labextension
-RUN jupyter labextension install dask-labextension --no-build && \
+RUN jupyter labextension install dask-labextension@2.0.2 --no-build && \
+    jupyter labextension install @jupyterlab/server-proxy --no-build && \
     jupyter serverextension enable dask_labextension
 
 # Install ipywidgets
@@ -78,15 +79,10 @@ RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
 RUN jupyter labextension install @jupyterlab/git --no-build && \
     jupyter serverextension enable jupyterlab_git
 
-# TODO: investigate compatibility with Jupyter Lab > 2.0
-# Install jupyterlab-sql
-# ----------------------
-# (with tentaclio support)
-# https://github.com/noosenergy/jupyterlab-sql/tree/tentaclio
-# RUN git clone -b tentaclio https://github.com/noosenergy/jupyterlab-sql.git /tmp/hub/jupyterlab-sql
-# RUN pip install /tmp/hub/jupyterlab-sql && \
-#     jupyter labextension install /tmp/hub/jupyterlab-sql --no-build && \
-#     jupyter serverextension enable jupyterlab_sql --py --sys-prefix
+# Configure extensions
+# --------------------
+# https://jupyterlab.readthedocs.io/en/stable/user/extensions.html#settings
+COPY settings/ ${CONDA_DIR}/share/jupyter/lab/settings
 
 # Build all extensions
 # --------------------

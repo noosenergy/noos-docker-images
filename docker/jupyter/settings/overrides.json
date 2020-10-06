@@ -1,5 +1,5 @@
 {
-    "@jupyterlab/filebrowser-extension:browser": {
-        "navigateToCurrentDirectory": true
-    }
+  "@jupyterlab/filebrowser-extension:browser": {
+    "navigateToCurrentDirectory": true
+  }
 }

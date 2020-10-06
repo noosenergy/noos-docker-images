@@ -1,5 +1,5 @@
 {
-    "uninstalled_core_extensions": [
-        "@jupyterlab/extensionmanager-extension"
-    ]
+  "uninstalled_core_extensions": [
+    "@jupyterlab/extensionmanager-extension"
+  ]
 }

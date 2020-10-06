@@ -1,5 +1,4 @@
 {
-    "disabledExtensions": [
-    ],
-    "terminalsAvailable": false
+  "disabledExtensions": [],
+  "terminalsAvailable": true
 }

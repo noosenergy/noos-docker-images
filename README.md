@@ -13,17 +13,12 @@ On Mac OSX, make sure [Homebrew](https://brew.sh/) has been pre-configured, then
 
 ### Local development
 
-Copy the codebase for:
-
-* the [`neptune-jupyter-hub`](https://github.com/noosenergy/neptune-jupyter-hub) platform
-
 This project comes with a `Makefile` which is ready to do basic common tasks.
 
 ```
 $ make
 help                           Display this auto-generated help message
-dotenv                         Create docker-compose dotenv file
-services                       Instantiate all services via docker-compose
+docker-login                   Login to docker hub image repository
 docker-build                   Build docker image for specified COMPONENT
 docker-tag                     Tag docker image for specified COMPONENT for upload
 docker-push                    Push docker image for specified COMPONENT

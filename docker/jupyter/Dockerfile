@@ -23,76 +23,71 @@ ARG APT_DEPS=" \
     texlive-xetex \
     texlive-fonts-recommended \
     texlive-plain-generic \
-    texlive-fonts-extra \
     # ----
     tzdata \
     unzip \
-    nano \
     # ---- JSON document parser ---
     jq \
     "
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends $APT_DEPS \
+    && apt-get install -yq --no-install-recommends $APT_DEPS \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Install packages
 # ----------------
 COPY environment.yml /tmp/
-RUN conda env update -q -f /tmp/environment.yml
+RUN conda env update -q -f /tmp/environment.yml \
+    && conda clean --all -f -y \
+    && fix-permissions $CONDA_DIR \
+    && fix-permissions /home/$NB_USER
 
-# Install debugger
+# Install extensions
 # ----------------
 # https://github.com/jupyterlab/debugger
 # https://www.npmjs.com/package/@jupyterlab/debugger
-RUN jupyter labextension install @jupyterlab/debugger --no-build
-
-# Install plotly
-# --------------
 # https://github.com/plotly/plotly.py
 # https://www.npmjs.com/package/jupyterlab-plotly
-RUN jupyter labextension install jupyterlab-plotly --no-build
-
-# Install voila
-# -------------
 # https://github.com/voila-dashboards/voila
 # https://www.npmjs.com/package/@jupyter-voila/jupyterlab-preview
-RUN jupyter labextension install @jupyter-voila/jupyterlab-preview --no-build
-
-# Install dask
-# ------------
 # https://github.com/dask/dask-labextension
 # https://www.npmjs.com/package/dask-labextension
-RUN jupyter labextension install dask-labextension --no-build && \
-    jupyter labextension install @jupyterlab/server-proxy --no-build && \
-    jupyter serverextension enable dask_labextension
-
-# Install ipywidgets
-# -------------------
 # https://github.com/jupyter-widgets/ipywidgets
 # https://www.npmjs.com/package/@jupyter-widgets/jupyterlab-manager
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
-
-# Install jupyterlab-git
-# ----------------------
 # https://github.com/jupyterlab/jupyterlab-git
 # https://www.npmjs.com/package/@jupyterlab/git
-RUN jupyter labextension install @jupyterlab/git --no-build && \
-    jupyter serverextension enable jupyterlab_git
+# https://github.com/jupytercalpoly/jupyterlab-code-snippets
+# https://github.com/jupyterlab/jupyterlab-toc
+
+RUN jupyter labextension install --no-build --clean \
+                                            @jupyterlab/debugger \
+                                            jupyterlab-plotly \
+                                            @jupyter-voila/jupyterlab-preview \
+                                            dask-labextension \
+                                            @jupyterlab/server-proxy \
+                                            @jupyter-widgets/jupyterlab-manager \
+                                            @jupyterlab/git \
+                                            jupyterlab-code-snippets \
+                                            @jupyterlab/toc \
+    && jupyter serverextension enable dask_labextension \
+                                      jupyterlab_git \
+    && rm -rf /tmp/* \
+    && rm -rf ${HOME}/.cache ${HOME}/.npm ${HOME}/.yarn \
+    && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \
+    && find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete \
+    && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete
+
 
 # Configure extensions
 # --------------------
 # https://jupyterlab.readthedocs.io/en/stable/user/extensions.html#settings
 COPY settings/ ${CONDA_DIR}/share/jupyter/lab/settings
+COPY snippets/ ${HOME}/snippets
 
 # Build all extensions
 # --------------------
 ARG NODE_OPTIONS=--max-old-space-size=4096
-RUN jupyter lab build
-
-# Fix dir permissions
-# -------------------
-RUN conda clean --all -f -y && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+RUN jupyter lab build --dev-build=False \
+    && jupyter lab clean
 
 USER $NB_UID

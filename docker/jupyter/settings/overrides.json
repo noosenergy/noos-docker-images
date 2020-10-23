@@ -1,5 +1,10 @@
 {
   "@jupyterlab/filebrowser-extension:browser": {
     "navigateToCurrentDirectory": true
+  },
+  "@jupyterlab/docmanager-extension:plugin": {
+    "defaultViewers": {
+      "markdown": "Markdown Preview"
+    }
   }
 }

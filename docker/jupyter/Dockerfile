@@ -29,6 +29,7 @@ ARG APT_DEPS=" \
     # ---- JSON document parser ---
     jq \
     "
+
 RUN apt-get update \
     && apt-get install -yq --no-install-recommends $APT_DEPS \
     && apt-get clean \
@@ -59,24 +60,29 @@ RUN conda env update -q -f /tmp/environment.yml \
 # https://github.com/jupytercalpoly/jupyterlab-code-snippets
 # https://github.com/jupyterlab/jupyterlab-toc
 
-RUN jupyter labextension install --no-build --clean \
-                                            @jupyterlab/debugger \
-                                            jupyterlab-plotly \
-                                            @jupyter-voila/jupyterlab-preview \
-                                            dask-labextension \
-                                            @jupyterlab/server-proxy \
-                                            @jupyter-widgets/jupyterlab-manager \
-                                            @jupyterlab/git \
-                                            jupyterlab-code-snippets \
-                                            @jupyterlab/toc \
-    && jupyter serverextension enable dask_labextension \
-                                      jupyterlab_git \
+ARG LAB_EXTENSIONS=" \
+    @jupyterlab/debugger \
+    jupyterlab-plotly \
+    @jupyter-voila/jupyterlab-preview \
+    dask-labextension@2.0.2 \
+    @jupyter-widgets/jupyterlab-manager \
+    @jupyterlab/git \
+    jupyterlab-code-snippets \
+    @jupyterlab/toc \
+    "
+
+ARG SERVER_EXTENSIONS=" \
+    dask_labextension \
+    jupyterlab_git \
+    "
+
+RUN jupyter labextension install --no-build --clean $LAB_EXTENSIONS \
+    && jupyter serverextension enable $SERVER_EXTENSIONS \
     && rm -rf /tmp/* \
     && rm -rf ${HOME}/.cache ${HOME}/.npm ${HOME}/.yarn \
     && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \
     && find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete \
     && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete
-
 
 # Configure extensions
 # --------------------

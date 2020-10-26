@@ -27,7 +27,7 @@ docker-login:  ## Login to docker hub image repository
 .PHONY: docker-build docker-tag docker-push
 
 docker-build:  ## Build docker image for specified COMPONENT
-	DOCKER_BUILDKIT=1 docker build --pull --tag ${IMAGE_NAME}/${COMPONENT} docker/${COMPONENT}
+	docker build --pull --tag ${IMAGE_NAME}/${COMPONENT} docker/${COMPONENT}
 
 docker-tag:  ## Tag docker image for specified COMPONENT for upload
 	docker tag ${IMAGE_NAME}/${COMPONENT} noosenergy/${COMPONENT}:${IMAGE_TAG}

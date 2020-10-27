@@ -31,7 +31,7 @@ ARG APT_DEPS=" \
     "
 
 RUN apt-get update \
-    && apt-get install -yq --no-install-recommends $APT_DEPS \
+    && apt-get install -y --no-install-recommends $APT_DEPS \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -88,7 +88,6 @@ RUN jupyter labextension install --no-build --clean $LAB_EXTENSIONS \
 # --------------------
 # https://jupyterlab.readthedocs.io/en/stable/user/extensions.html#settings
 COPY settings/ ${CONDA_DIR}/share/jupyter/lab/settings
-COPY snippets/ ${HOME}/snippets
 
 # Build all extensions
 # --------------------

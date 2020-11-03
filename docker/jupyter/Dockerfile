@@ -1,4 +1,4 @@
-FROM jupyter/base-notebook:python-3.7.6
+FROM jupyter/base-notebook:python-3.8.6
 
 # https://github.com/jupyter/docker-stacks
 # https://hub.docker.com/u/jupyter/
@@ -64,7 +64,6 @@ RUN conda env update -q -f /tmp/environment.yml \
 # https://github.com/jupytercalpoly/jupyterlab-tabular-data-editor
 # A essayer:
 # https://github.com/bokeh/jupyter_bokeh
-# https://github.com/quantopian/qgrid
 
 ARG LAB_EXTENSIONS=" \
     @jupyterlab/debugger \
@@ -78,8 +77,6 @@ ARG LAB_EXTENSIONS=" \
     @aquirdturtle/collapsible_headings \
     @lckr/jupyterlab_variableinspector \
     jupyterlab-tabular-data-editor \
-
-#    qgrid2 \
     "
 
 ARG SERVER_EXTENSIONS=" \

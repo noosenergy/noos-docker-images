@@ -59,6 +59,12 @@ RUN conda env update -q -f /tmp/environment.yml \
 # https://www.npmjs.com/package/@jupyterlab/git
 # https://github.com/jupytercalpoly/jupyterlab-code-snippets
 # https://github.com/jupyterlab/jupyterlab-toc
+# https://github.com/aquirdTurtle/Collapsible_Headings
+# https://github.com/lckr/jupyterlab-variableInspector
+# https://github.com/jupytercalpoly/jupyterlab-tabular-data-editor
+# A essayer:
+# https://github.com/bokeh/jupyter_bokeh
+# https://github.com/quantopian/qgrid
 
 ARG LAB_EXTENSIONS=" \
     @jupyterlab/debugger \
@@ -69,6 +75,11 @@ ARG LAB_EXTENSIONS=" \
     @jupyterlab/git \
     jupyterlab-code-snippets \
     @jupyterlab/toc \
+    @aquirdturtle/collapsible_headings \
+    @lckr/jupyterlab_variableinspector \
+    jupyterlab-tabular-data-editor \
+
+#    qgrid2 \
     "
 
 ARG SERVER_EXTENSIONS=" \

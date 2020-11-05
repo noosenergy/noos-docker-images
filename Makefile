@@ -15,16 +15,12 @@ help:  ## Display this auto-generated help message
 	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 
-# Installation
-.PHONY: docker-login
+# Docker workflow
+.PHONY: docker-login docker-build docker-tag docker-push
 
 docker-login:  ## Login to docker hub image repository
 	# https://hub.docker.com/u/noosenergy/
 	docker login --username noosenergy --password ${DOCKERHUB_TOKEN}
-
-
-# Deployment
-.PHONY: docker-build docker-tag docker-push
 
 docker-build:  ## Build docker image for specified COMPONENT
 	docker build --pull --tag ${IMAGE_NAME}/${COMPONENT} docker/${COMPONENT}

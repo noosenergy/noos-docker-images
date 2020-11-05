@@ -41,6 +41,7 @@ COPY environment.yml /tmp/
 RUN conda env update -q -f /tmp/environment.yml \
     && conda clean --all -f -y \
     && fix-permissions $CONDA_DIR \
+    && rm -rf /home/$NB_USER/work \
     && fix-permissions /home/$NB_USER
 
 # Install extensions

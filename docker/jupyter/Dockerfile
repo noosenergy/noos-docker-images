@@ -1,4 +1,4 @@
-FROM jupyter/base-notebook:python-3.8.6
+FROM jupyter/base-notebook:python-3.7.6
 
 # https://github.com/jupyter/docker-stacks
 # https://hub.docker.com/u/jupyter/
@@ -60,10 +60,9 @@ RUN conda env update -q -f /tmp/environment.yml \
 # https://github.com/jupytercalpoly/jupyterlab-code-snippets
 # https://github.com/jupyterlab/jupyterlab-toc
 # https://github.com/aquirdTurtle/Collapsible_Headings
-# https://github.com/lckr/jupyterlab-variableInspector
-# https://github.com/jupytercalpoly/jupyterlab-tabular-data-editor
-# A essayer:
-# https://github.com/bokeh/jupyter_bokeh
+# A essayer
+# https://github.com/arbennett/jupyterlab-themes
+# https://github.com/quigleyj97/jupyterlab-spreadsheet
 
 ARG LAB_EXTENSIONS=" \
     @jupyterlab/debugger \
@@ -75,8 +74,7 @@ ARG LAB_EXTENSIONS=" \
     jupyterlab-code-snippets \
     @jupyterlab/toc \
     @aquirdturtle/collapsible_headings \
-    @lckr/jupyterlab_variableinspector \
-    jupyterlab-tabular-data-editor \
+    jupyterlab-spreadsheet \
     "
 
 ARG SERVER_EXTENSIONS=" \
@@ -100,7 +98,7 @@ COPY settings/ ${CONDA_DIR}/share/jupyter/lab/settings
 # Build all extensions
 # --------------------
 ARG NODE_OPTIONS=--max-old-space-size=4096
-RUN jupyter lab build --dev-build=False \
-    && jupyter lab clean
+RUN jupyter lab clean \
+    && jupyter lab build --dev-build=False
 
 USER $NB_UID

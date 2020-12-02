@@ -61,9 +61,6 @@ RUN conda env update -q -f /tmp/environment.yml \
 # https://github.com/jupytercalpoly/jupyterlab-code-snippets
 # https://github.com/jupyterlab/jupyterlab-toc
 # https://github.com/aquirdTurtle/Collapsible_Headings
-# A essayer
-# https://github.com/arbennett/jupyterlab-themes
-# https://github.com/quigleyj97/jupyterlab-spreadsheet
 
 ARG LAB_EXTENSIONS=" \
     @jupyterlab/debugger \
@@ -75,7 +72,6 @@ ARG LAB_EXTENSIONS=" \
     jupyterlab-code-snippets \
     @jupyterlab/toc \
     @aquirdturtle/collapsible_headings \
-    jupyterlab-spreadsheet \
     "
 
 ARG SERVER_EXTENSIONS=" \

@@ -1,0 +1,25 @@
+{
+  "name": "pricing_client_retrieve_forward_fixings",
+  "description": "Retrieve all forward fixings on latest date",
+  "language": "Python",
+  "code": [
+    "",
+    "# Retrieve all forward fixings on latest date",
+    "",
+    "import os, octoclient, datetime as dt",
+    "",
+    "FIXINGS_QUERY_PARAMS = {",
+    "    \"asset\": \"NBP\",",
+    "#    \"published_at\": dt.datetime(2020, 1, 1)",
+    "}",
+    "",
+    "pricing_client = octoclient.PricingClient(os.environ[\"OCTOCURVE__PROXY_DNS\"])",
+    "%time fixings = pricing_client.retrieve_forward_fixings(**FIXINGS_QUERY_PARAMS)",
+    "fixings",
+    ""
+  ],
+  "id": 31,
+  "tags": [
+    "pricing_client"
+  ]
+}

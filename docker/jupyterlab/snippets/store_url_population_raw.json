@@ -1,0 +1,21 @@
+{
+  "name": "store_url_population_raw",
+  "description": "Retrieve a raw population url",
+  "language": "Python",
+  "code": [
+    "",
+    "# Retrieve a raw population url",
+    "",
+    "import datetime as dt",
+    "",
+    "S3_EXTRACT_URL = \"s3://octoenergy-production-pipelines/Store/Extracts/population_snapshot/\"",
+    "BASE_DATE = dt.date.today()",
+    "ASSET_NAME = \"UKPX\"",
+    "",
+    "raw_pop_url = S3_EXTRACT_URL + f\"asset={ASSET_NAME}/{BASE_DATE.isoformat()}.parquet\"",
+    "raw_pop_url",
+    ""
+ ],
+  "id": 51,
+  "tags": []
+}

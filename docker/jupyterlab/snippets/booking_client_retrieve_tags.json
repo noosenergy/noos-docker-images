@@ -1,0 +1,24 @@
+{
+  "name": "booking_client_retrieve_tags",
+  "description": "Retrieve tags present in portfolios",
+  "language": "Python",
+  "code": [
+    "",
+    "# Retrieve tags present in portfolios",
+    "",
+    "import os, octoclient",
+    "",
+    "TAGS_QUERY_PARAMS = {",
+    "    \"name__contains\": \"chosen_tag_name\",",
+    "}",
+    "",
+    "booking_client = octoclient.BookingClient(os.environ[\"OCTOTRADE__PROXY_DNS\"])",
+    "tags = booking_client.retrieve_tags(**TAGS_QUERY_PARAMS)",
+    "tags",
+    ""
+  ],
+  "id": 22,
+  "tags": [
+    "booking_client"
+  ]
+}

@@ -5,9 +5,10 @@ FROM jupyterhub/k8s-hub:0.10.3
 
 USER root
 
-# Copy custom assets
+# Copy custom extra-assets
 # --------------------
 # https://jupyterlab.readthedocs.io/en/stable/user/extensions.html#settings
-COPY custom /usr/local/share/jupyterhub/custom
+COPY custom/templates /usr/local/share/jupyterhub/custom_templates
+COPY custom/assets /usr/local/share/jupyterhub/static/custom
 
 USER $NB_UID

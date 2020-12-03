@@ -98,4 +98,8 @@ ARG NODE_OPTIONS=--max-old-space-size=4096
 RUN jupyter lab clean \
     && jupyter lab build --dev-build=False --name='Neptune'
 
+# Configure snippets extension
+# ------------------------
+COPY snippets/ /home/$NB_USER/snippets
+
 USER $NB_UID

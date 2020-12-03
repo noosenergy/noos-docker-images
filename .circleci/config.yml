@@ -48,6 +48,15 @@ jobs:
       - checkout
       - build_push_image
 
+  build-jupyterhub:
+    executor: standard
+    environment:
+      IMAGE_TAG: ${CIRCLE_SHA1}
+      COMPONENT: "jupyterhub"
+    steps:
+      - checkout
+      - build_push_image
+
   build-jupyterlab:
     executor: standard
     environment:
@@ -66,6 +75,11 @@ workflows:
   build:
     jobs:
       - build-dbbackup:
+          context: CIRCLECI_SHARED
+          filters:
+            branches:
+              only: master
+      - build-jupyterhub:
           context: CIRCLECI_SHARED
           filters:
             branches:

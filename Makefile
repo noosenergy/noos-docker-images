@@ -1,6 +1,6 @@
 SHELL := /bin/sh -e
 
-COMPONENT ?= jupyter
+COMPONENT ?= jupyterhub
 IMAGE_TAG ?= test
 IMAGE_NAME ?= noosforge
 

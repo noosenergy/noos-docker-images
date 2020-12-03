@@ -45,4 +45,5 @@ docker-push                    Push docker image for specified COMPONENT
 The repository implements as well a set of utilities with their associated Docker images:
 
 * a [backing-up service](./docker/db-back-up) for databases into local / remote storage
-* a [jupyter-lab service](./docker/jupyter) for launching a k8s pre-configured notebook server
+* a [jupyter-hub service](docker/jupyterhub) for launching a jupyterhub with custom assets
+* a [jupyter-lab service](docker/jupyterlab) for launching a k8s pre-configured notebook server

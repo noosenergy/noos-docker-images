@@ -83,7 +83,7 @@ workflows:
           context: CIRCLECI_SHARED
           filters:
             branches:
-              only: master
+              only: fix/correct-path-assets
       - build-jupyterlab:
           context: CIRCLECI_SHARED
           filters:

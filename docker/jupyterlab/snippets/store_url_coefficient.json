@@ -1,0 +1,36 @@
+{
+  "name": "store_url_coefficient",
+  "description": "Retrieve a coefficient url",
+  "language": "Python",
+  "code": [
+    "",
+    "# Retrieve a coefficient url",
+    "",
+    "import os, octoclient, datetime as dt",
+    "",
+    "BASE_DATETIME = dt.datetime.combine(dt.date.today(), dt.time())",
+    "ASSET_NAME = \"UKPX\"",
+    "RANGE_IN_WEEKS = 104",
+    "COEF_CATEGORY = \"PPC\"",
+    "",
+    "COEF_URL_QUERY_PARAMS = {",
+    "    \"root_url\": \"s3://octoenergy-production-pipelines/Staging/Extracts\",",
+    "    \"type\": \"COEFFICIENT\",",
+    "    \"asset\": ASSET_NAME,",
+    "    \"category\": COEF_CATEGORY,",
+    "    \"range\": f\"{RANGE_IN_WEEKS}W\",",
+    "    \"date_from\": BASE_DATETIME.date(),",
+    "    \"published_at\": BASE_DATETIME",
+    "}",
+    "",
+    "pricing_client = octoclient.PricingClient(os.environ[\"OCTOCURVE__PROXY_DNS\"])",
+    "coef_url = pricing_client.retrieve_store_url(**COEF_URL_QUERY_PARAMS)",
+    "coef_url",
+     ""
+ ],
+  "id": 53,
+  "tags": [
+    "pricing_client"
+  ]
+}
+

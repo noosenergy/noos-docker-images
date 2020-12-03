@@ -1,0 +1,22 @@
+{
+  "name": "booking_client_token_set",
+  "description": "Register a token to enter trades",
+  "language": "Python",
+  "code": [
+    "",
+    "# Register a token to enter trades",
+    "",
+    "import os, octoclient",
+    "",
+    "# Your booking API token obtained from booking_client_token_get",
+    "API_TOKEN = \"\"",
+    "",
+    "booking_client = octoclient.BookingClient(os.environ[\"OCTOTRADE__PROXY_DNS\"])",
+    "booking_client.set_api_credentials(API_TOKEN)",
+    ""
+  ],
+  "id": 24,
+  "tags": [
+    "booking_client"
+  ]
+}

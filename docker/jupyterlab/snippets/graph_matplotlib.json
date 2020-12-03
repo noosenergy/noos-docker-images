@@ -1,0 +1,22 @@
+{
+  "name": "graph_matplotlib",
+  "description": "Create a Matplotlib graph",
+  "language": "Python",
+  "code": [
+    "# Create a Matplotlib graph",
+    "",
+    "import matplotlib.pyplot as plt",
+    "_, ax = plt.subplots(figsize=[8,5])",
+    "df['y_column'].plot(ax=ax, label='label_name')",
+    "ax.legend()",
+    "ax.grid()",
+    "ax.set_title('enter_title_here')",
+    "",
+    "plt.show();",
+    ""
+  ],
+  "id": 110,
+  "tags": [
+    "dashboard"
+  ]
+}

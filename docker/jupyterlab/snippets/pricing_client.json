@@ -1,0 +1,16 @@
+{
+  "name": "pricing_client",
+  "description": "Set up a pricing client",
+  "language": "Python",
+  "code": [
+    "# Set up a pricing client",
+    "",
+    "import os, octoclient",
+    "pricing_client = octoclient.PricingClient(os.environ[\"OCTOCURVE__PROXY_DNS\"])",
+    ""
+  ],
+  "id": 30,
+  "tags": [
+    "import", "pricing_client"
+  ]
+}

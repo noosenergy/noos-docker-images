@@ -1,0 +1,30 @@
+{
+  "name": "booking_client_retrieve_trades",
+  "description": "Retrieve trades present in portfolios",
+  "language": "Python",
+  "code": [
+    "",
+    "# Retrieve trades present in portfolios",
+    "",
+    "import os, octoclient, datetime as dt",
+    "",
+    "BASE_DATE = dt.date.today()",
+    "",
+    "TRADES_QUERY_PARAMS = {",
+    "    \"asset\": \"NBP\",",
+    "    \"portfolio_name\": \"MASTER,FIXED\",",
+    "    \"delivery_to__gte\": BASE_DATE,",
+    "    \"delivery_from__lte\": BASE_DATE + dt.timedelta(days=365),",
+    "    \"traded_at__gte\": BASE_DATE - dt.timedelta(days=365),",
+    "}",
+    "",
+    "booking_client = octoclient.BookingClient(os.environ[\"OCTOTRADE__PROXY_DNS\"])",
+    "%time trades = booking_client.retrieve_forward_contracts(**TRADES_QUERY_PARAMS)",
+    "trades",
+    ""
+  ],
+  "id": 21,
+  "tags": [
+    "booking_client"
+  ]
+}

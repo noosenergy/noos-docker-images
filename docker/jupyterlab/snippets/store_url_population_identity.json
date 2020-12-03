@@ -1,0 +1,34 @@
+{
+  "name": "store_url_population_identity",
+  "description": "Retrieve a cleaned full population url",
+  "language": "Python",
+  "code": [
+    "",
+    "# Retrieve a cleaned full population url",
+    "",
+    "import os, octoclient, datetime as dt",
+    "",
+    "BASE_DATETIME = dt.datetime.combine(dt.date.today(), dt.time())",
+    "ASSET_NAME = \"UKPX\"",
+    "RANGE_IN_WEEKS = 104",
+    "",
+    "ID_POP_URL_QUERY_PARAMS = {",
+    "    \"root_url\": \"s3://octoenergy-production-pipelines/Staging/Extracts\",",
+    "    \"type\": \"POPULATION\",",
+    "    \"asset\": ASSET_NAME,",
+    "    \"category\": \"IDENTITY\",",
+    "    \"range\": f\"{RANGE_IN_WEEKS}W\",",
+    "    \"date_from\": BASE_DATETIME.date(),",
+    "    \"published_at\": BASE_DATETIME",
+    "}",
+    "",
+    "pricing_client = octoclient.PricingClient(os.environ[\"OCTOCURVE__PROXY_DNS\"])",
+    "id_pop_url = pricing_client.retrieve_store_url(**ID_POP_URL_QUERY_PARAMS)",
+    "id_pop_url",
+    ""
+  ],
+  "id": 52,
+  "tags": [
+    "pricing_client"
+  ]
+}

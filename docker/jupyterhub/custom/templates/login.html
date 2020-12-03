@@ -2,14 +2,14 @@
 
 {% block main %}
 <div class="container text-center pangeo">
-    <h1>{{ pangeo_hub_title or 'Pangeo JupyterHub' }}</h1>
+    <h1>{{ pangeo_hub_title or 'Neptune JupyterHub' }}</h1>
     <h2>{{ pangeo_hub_subtitle }}</h2>
     <p>
       {% if pangeo_welcome %}
       {{ (pangeo_welcome | safe) }}
       {% else %}
-      Welcome to this Pangeo JupyterHub. For more information about Pangeo,
-      visit <a href="http://pangeo.io">pangeo.io</a>.
+      Welcome to this Neptune JupyterHub. For more information about Noos,
+      visit <a href="http://noos.energy">noos.energy</a>.
       {% endif %}
     </p>
 </div>

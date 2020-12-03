@@ -96,6 +96,6 @@ COPY settings/ ${CONDA_DIR}/share/jupyter/lab/settings
 # --------------------
 ARG NODE_OPTIONS=--max-old-space-size=4096
 RUN jupyter lab clean \
-    && jupyter lab build --dev-build=False
+    && jupyter lab build --dev-build=False --name='Neptune'
 
 USER $NB_UID

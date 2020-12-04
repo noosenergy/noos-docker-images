@@ -1,0 +1,15 @@
+version: '2.4'
+
+services:
+  jupyterhub:
+    build: .
+    image: jupyterhub/jupyterhub
+    container_name: jupyterhub_test_dco
+    command: ["jupyterhub"]
+    volumes:
+      # Mount folders
+      - ${NOOS_FORGE_REPO_PATH}/docker/jupyterhub/custom/templates:/usr/local/share/jupyterhub/custom_templates:delegated
+      - ${NOOS_FORGE_REPO_PATH}/docker/jupyterhub/custom/assets:/usr/local/share/jupyterhub/static/custom:delegated
+    ports:
+      # Expose service to localhost:7777
+      - 7001:8888

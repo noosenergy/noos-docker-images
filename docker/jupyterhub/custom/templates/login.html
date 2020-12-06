@@ -1,17 +1,22 @@
 {% extends "templates/login.html" %}
 
 {% block main %}
-<div class="container text-center pangeo">
-    <h1>{{ pangeo_hub_title or 'Neptune JupyterHub' }}</h1>
+<div id="login-main-top" class="container text-center">
+    <h1>{{ pangeo_hub_title or 'Neptune Hub' }}</h1>
     <h2>{{ pangeo_hub_subtitle }}</h2>
     <p>
       {% if pangeo_welcome %}
       {{ (pangeo_welcome | safe) }}
       {% else %}
-      Welcome to this Neptune JupyterHub. For more information about Noos,
+      Welcome to our custom JupyterHub. For more information about Noos,
       visit <a href="http://noos.energy">noos.energy</a>.
       {% endif %}
     </p>
 </div>
 {{ super() }}
+
+<footer class='navbar-default text-center'>
+    <p>Access to Neptune is currently in late Beta mode. To request a live demo and a trial login, visit <a href="http://noos.energy">noos.energy</a></p>
+</footer>
+
 {% endblock %}

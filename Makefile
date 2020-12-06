@@ -6,14 +6,30 @@ IMAGE_NAME ?= noosforge
 
 .DEFAULT_GOAL := help
 
+# Load dotenv into shell
+ifneq (,$(wildcard .env))
+	include .env
+	export
+endif
 
 # Helper
-.PHONY: help
+.PHONY: help test_docker test_dco
 
 help:  ## Display this auto-generated help message
 	@grep -E '^[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+test_docker:
+	cd local && \
+	docker run -p 7000:8000 --rm --name jupyterhub_test_docker \
+  	-v ${NOOS_FORGE_REPO_PATH}/docker/jupyterhub/custom/templates:/usr/local/share/jupyterhub/custom_templates:delegated \
+    -v ${NOOS_FORGE_REPO_PATH}/docker/jupyterhub/custom/assets:/usr/local/share/jupyterhub/static/custom:delegated \
+  	-v ${NOOS_FORGE_REPO_PATH}/local:/usr/local/share/jupyterhub/local:delegated \
+  	jupyterhub/jupyterhub jupyterhub -f /usr/local/share/jupyterhub/local/jupyterhub_config.py
+
+test_dco:
+	cd local && \
+	docker-compose up
 
 # Docker workflow
 .PHONY: docker-login docker-build docker-tag docker-push

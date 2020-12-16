@@ -1,37 +1,14 @@
 ---
 version: 2.1
 
-# ------------------
-# Reusable executors
-# ------------------
+# ----------------
+# Orbs declaration
+# ----------------
 
-executors:
+orbs:
 
-  standard:
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    working_directory: "~/app"
+  noos-ci: noosenergy/noos-ci@0.1.3
 
-# -----------------
-# Reusable commands
-# -----------------
-
-commands:
-
-  build_push_image:
-    steps:
-      - setup_remote_docker:
-          docker_layer_caching: false
-      - run:
-          name: Build and tag Docker images
-          command: |
-            make docker-build
-            make docker-tag
-      - run:
-          name: Push Docker images to Docker Hub
-          command: |
-            make docker-login
-            make docker-push
 
 # --------------
 # Pipeline tasks
@@ -40,31 +17,35 @@ commands:
 jobs:
 
   build-dbbackup:
-    executor: standard
-    environment:
-      IMAGE_TAG: ${CIRCLE_SHA1}
-      COMPONENT: "db-backup"
+    executor: noos-ci/default
     steps:
       - checkout
-      - build_push_image
+      - noos-ci/docker-build-image:
+          registry-provider: docker
+          image-context: ./docker/db-backup
+          image-name: db-backup
+          image-tag: ${CIRCLE_SHA1}
 
   build-jupyterhub:
-    executor: standard
-    environment:
-      IMAGE_TAG: ${CIRCLE_SHA1}
-      COMPONENT: "jupyterhub"
+    executor: noos-ci/default
     steps:
       - checkout
-      - build_push_image
+      - noos-ci/docker-build-image:
+          registry-provider: docker
+          image-context: ./docker/jupyterhub
+          image-name: jupyterhub
+          image-tag: ${CIRCLE_SHA1}
 
   build-jupyterlab:
-    executor: standard
-    environment:
-      IMAGE_TAG: ${CIRCLE_SHA1}
-      COMPONENT: "jupyterlab"
+    executor: noos-ci/default
     steps:
       - checkout
-      - build_push_image
+      - noos-ci/docker-build-image:
+          registry-provider: docker
+          image-context: ./docker/jupyterlab
+          image-name: jupyterlab
+          image-tag: ${CIRCLE_SHA1}
+
 
 # -----------------
 # Pipeline workflow

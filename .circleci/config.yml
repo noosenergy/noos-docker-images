@@ -7,7 +7,7 @@ version: 2.1
 
 orbs:
 
-  noos-ci: noosenergy/noos-ci@0.1.3
+  noos-ci: noosenergy/noos-ci@0.1.5
 
 
 # --------------

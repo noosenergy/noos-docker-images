@@ -33,9 +33,9 @@ Dive gives an "image efficiency" ratio and makes it easier to find wasted space 
 
 ### Local development
 
-The development workflows of this project can be managed by [noos-deploy](https://github.com/noosenergy/noos-deploy), a ready-made CLI for common CI/CD tasks.
+The development workflows of this project can be managed by [noos-invoke](https://github.com/noosenergy/noos-invoke), a ready-made CLI for common CI/CD tasks.
 
 ```
-$ nooci
-Usage: noosci [--core-opts] <subcommand> [--subcommand-opts] ...
+$ noosinv
+Usage: noosinv [--core-opts] <subcommand> [--subcommand-opts] ...
 ```

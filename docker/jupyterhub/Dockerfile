@@ -1,3 +1,4 @@
+# hub image in sync with helm chart in repo neptune-jupyter-hub
 FROM jupyterhub/k8s-hub:0.10.3
 
 # https://github.com/jupyter/docker-stacks

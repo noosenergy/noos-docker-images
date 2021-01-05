@@ -1,4 +1,4 @@
-FROM jupyter/base-notebook:python-3.7.6
+FROM jupyter/base-notebook:python-3.8.6
 
 # https://github.com/jupyter/docker-stacks
 # https://hub.docker.com/u/jupyter/
@@ -64,15 +64,15 @@ RUN conda env update -q -f /tmp/environment.yml \
 
 ARG LAB_EXTENSIONS=" \
     @jupyterlab/debugger \
-    jupyterlab-plotly \
     @jupyter-voila/jupyterlab-preview \
-    dask-labextension@2.0.2 \
+    dask-labextension \
     @jupyter-widgets/jupyterlab-manager \
     @jupyterlab/git \
     jupyterlab-code-snippets \
     @jupyterlab/toc \
     @aquirdturtle/collapsible_headings \
     "
+
 
 ARG SERVER_EXTENSIONS=" \
     dask_labextension \

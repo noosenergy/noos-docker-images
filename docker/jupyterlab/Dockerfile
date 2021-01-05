@@ -64,6 +64,8 @@ RUN conda env update -q -f /tmp/environment.yml \
 
 ARG LAB_EXTENSIONS=" \
     @jupyterlab/debugger \
+    jupyterlab-plotly \
+    plotlywidget \
     @jupyter-voila/jupyterlab-preview \
     dask-labextension \
     @jupyter-widgets/jupyterlab-manager \

@@ -6,12 +6,14 @@
 {% endblock %}
 
 {% block favicon %}
-<link rel="icon" href="{{ static_url("custom/images/favicon.ico") }}" type="image/x-icon">
+<link rel="icon" href="{{ static_url("custom/images/favicon.png") }}" type="image/png">
 {% endblock %}
 
 {% block logo %}
 <span id="jupyterhub-logo" class="pull-left">
-    <a href="{{logo_url or base_url}}"><img src="{{static_url("custom/images/Noos_Energy_infinity.png") }}" alt='JupyterHub' class='jpy-logo' title='Home'/></a>
+    <a href="{{logo_url or base_url}}">
+        <img src="{{static_url("custom/images/logo-reduced.svg") }}" alt="Noos Energy" class="jpy-logo" title="Home">
+    </a>
 </span>
 {% endblock %}
 

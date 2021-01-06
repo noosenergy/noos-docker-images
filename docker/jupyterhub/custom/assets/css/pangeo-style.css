@@ -10,7 +10,7 @@
 }
 
 .pangeo h1 {
-  color: #000;
+  color: #151515;
   font-family: "Panton Black Caps";
   margin-top: 30px;
   margin-bottom: 30px;
@@ -19,7 +19,7 @@
 .pangeo h2 {
   font-family: "Panton Light Caps";
   font-size: 2rem;
-  color: #000;
+  color: #151515;
   margin-bottom: 20px;
 }
 
@@ -30,8 +30,8 @@
 
 
 .navbar.navbar-default {
-  background: -webkit-linear-gradient(left, #FFFE0D, #0D0D0D); /* Chrome10+, Safari5.1+ */
-  background: linear-gradient(left, #FFFE0D, #0D0D0D);
+  background: -webkit-linear-gradient(left, #fac505, #151515); /* Chrome10+, Safari5.1+ */
+  background: linear-gradient(left, #fac505, #151515);
   border: None;
 }
 
@@ -40,37 +40,25 @@
 }
 
 .navbar.navbar-default .navbar-nav>li>a:hover, .navbar.navbar-default .navbar-nav>li>a:focus {
-    background-color: #0D0D0D;
+    background-color: #151515;
 }
 
 .navbar.navbar-default .navbar-nav>.open>a, .navbar.navbar-default .navbar-nav>.open>a:hover, .navbar.navbar-default .navbar-nav>.open>a:focus  {
-    background-color: #0D0D0D;
+    background-color: #151515;
 }
 
 #login-main .auth-form-header {
-    background: #0D0D0D !important;
+    background: #151515 !important;
 }
 
 
 .btn-jupyter {
-    color: #FFFE0D;
-    background-color: #0D0D0D !important;
-    border-color: #0D0D0D !important;
+    color: #fac505;
+    background-color: #151515 !important;
+    border-color: #151515 !important;
 }
 
 #login-main .service-login {
     vertical-align: top !important;
     padding-top: 60px;
 }
-
-#login-main {
-    background: #E1DFDE;
-}
-
-#login-main-top {
-    background: #E1DFDE;
-}
-
-body {
-    background-color: lightblue;
-  }

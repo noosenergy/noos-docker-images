@@ -1,4 +1,6 @@
 name: base
+channels:
+  - conda-forge
 dependencies:
   - xeus-python
   - matplotlib
@@ -8,5 +10,6 @@ dependencies:
   - jupyter-server-proxy
   - ipywidgets
   - jupyterlab-git
-channels:
-  - conda-forge
+  - bqplot
+  - jupyter-flex
+

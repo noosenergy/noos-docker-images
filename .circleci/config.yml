@@ -7,7 +7,7 @@ version: 2.1
 
 orbs:
 
-  noos-ci: noosenergy/noos-ci@0.1.11
+  noos-ci: noosenergy/noos-ci@0.1.9
 
 
 # --------------
@@ -16,7 +16,7 @@ orbs:
 
 jobs:
 
-  build-image-dbbackup:
+  build-dbbackup:
     executor: noos-ci/default
     steps:
       - checkout
@@ -26,7 +26,7 @@ jobs:
           image-name: db-backup
           image-tag: ${CIRCLE_SHA1}
 
-  build-image-jupyterhub:
+  build-jupyterhub:
     executor: noos-ci/default
     steps:
       - checkout
@@ -36,7 +36,7 @@ jobs:
           image-name: jupyterhub
           image-tag: ${CIRCLE_SHA1}
 
-  build-image-jupyterlab:
+  build-jupyterlab:
     executor: noos-ci/default
     steps:
       - checkout
@@ -53,20 +53,40 @@ jobs:
 
 workflows:
 
-  build:
+  build-dbbackup:
     jobs:
-      - build-image-dbbackup:
-          context: CIRCLECI_SHARED
-          filters:
+      - hold:
+          type: approval
+          filters: &filter-master-only
             branches:
               only: master
-      - build-image-jupyterhub:
+      - build-dbbackup:
           context: CIRCLECI_SHARED
           filters:
-            branches:
-              only: master
-      - build-image-jupyterlab:
-          context: CIRCLECI_SHARED
+            <<: *filter-master-only
+
+  build-jupyterhub:
+    jobs:
+      - hold:
+          type: approval
           filters:
-            branches:
-              only: master
+            <<: *filter-master-only
+      - build-jupyterhub:
+          context: CIRCLECI_SHARED
+          requires:
+            - hold
+          filters:
+            <<: *filter-master-only
+
+  build-jupyterlab:
+    jobs:
+      - hold:
+          type: approval
+          filters:
+            <<: *filter-master-only
+      - build-jupyterlab:
+          context: CIRCLECI_SHARED
+          requires:
+            - hold
+          filters:
+            <<: *filter-master-only

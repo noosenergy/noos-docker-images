@@ -66,7 +66,7 @@ ARG LAB_EXTENSIONS=" \
     @jupyterlab/debugger \
     jupyterlab-plotly \
     plotlywidget \
-    @jupyter-voila/jupyterlab-preview \
+    @voila-dashboards/jupyterlab-preview \
     dask-labextension \
     @jupyter-widgets/jupyterlab-manager \
     @jupyterlab/git \

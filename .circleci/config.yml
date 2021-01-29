@@ -53,20 +53,36 @@ jobs:
 
 workflows:
 
-  build:
+  build-image-dbbackup:
     jobs:
+      - hold:
+          type: approval
+          filters: &filter-master-only
+            branches:
+              only: master
       - build-image-dbbackup:
           context: CIRCLECI_SHARED
           filters:
-            branches:
-              only: master
+            <<: *filter-master-only
+
+  build-image-jupyterhub:
+    jobs:
+      - hold:
+          type: approval
+          filters:
+            <<: *filter-master-only
       - build-image-jupyterhub:
           context: CIRCLECI_SHARED
           filters:
-            branches:
-              only: master
+            <<: *filter-master-only
+
+  build-image-jupyterlab:
+    jobs:
+      - hold:
+          type: approval
+          filters:
+            <<: *filter-master-only
       - build-image-jupyterlab:
           context: CIRCLECI_SHARED
           filters:
-            branches:
-              only: master
+            <<: *filter-master-only

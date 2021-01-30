@@ -62,6 +62,8 @@ workflows:
               only: master
       - build-image-dbbackup:
           context: CIRCLECI_SHARED
+          requires:
+            - hold
           filters:
             <<: *filter-master-only
 
@@ -73,6 +75,8 @@ workflows:
             <<: *filter-master-only
       - build-image-jupyterhub:
           context: CIRCLECI_SHARED
+          requires:
+            - hold
           filters:
             <<: *filter-master-only
 
@@ -84,5 +88,7 @@ workflows:
             <<: *filter-master-only
       - build-image-jupyterlab:
           context: CIRCLECI_SHARED
+          requires:
+            - hold
           filters:
             <<: *filter-master-only

@@ -3,7 +3,8 @@
 # Noos Forge
 Set of developer tools for working locally on the Neptune platform and build optimized base images:
 
-* a [backing-up service](./docker/db-back-up) for databases into local / remote storage
+* a [CircleCI](./docker/circleci) base image for running CI/CD pipelines
+* a [backing-up service](./docker/dbbackup) for databases into local / remote storage
 * a [jupyter-hub service](docker/jupyterhub) for launching a jupyterhub with custom assets
 * a [jupyter-lab service](docker/jupyterlab) for launching a k8s pre-configured notebook server
 

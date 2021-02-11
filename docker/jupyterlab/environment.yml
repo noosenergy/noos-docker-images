@@ -12,4 +12,5 @@ dependencies:
   - jupyterlab-git
   - bqplot
   - jupyter-flex
-
+  - jupyterlab-lsp
+  - jedi-language-server

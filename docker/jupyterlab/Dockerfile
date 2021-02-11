@@ -69,7 +69,6 @@ ARG LAB_EXTENSIONS=" \
     @voila-dashboards/jupyterlab-preview \
     dask-labextension \
     @jupyter-widgets/jupyterlab-manager \
-    @jupyterlab/git \
     jupyterlab-code-snippets \
     @jupyterlab/toc \
     @aquirdturtle/collapsible_headings \
@@ -78,7 +77,6 @@ ARG LAB_EXTENSIONS=" \
 
 ARG SERVER_EXTENSIONS=" \
     dask_labextension \
-    jupyterlab_git \
     "
 
 RUN jupyter labextension install --no-build --clean $LAB_EXTENSIONS \

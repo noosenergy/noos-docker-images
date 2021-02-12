@@ -9,8 +9,7 @@ dependencies:
   - dask-labextension
   - jupyter-server-proxy
   - ipywidgets
-  - jupyterlab-git
+  # installing through pip to get latest stable version
+  # - jupyterlab-git
   - bqplot
   - jupyter-flex
-  - jupyterlab-lsp
-  - jedi-language-server

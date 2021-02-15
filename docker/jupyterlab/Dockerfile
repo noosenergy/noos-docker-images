@@ -1,7 +1,7 @@
-# https://hub.docker.com/u/noosenergy/
+FROM jupyter/base-notebook:python-3.8.6
+
 # https://github.com/jupyter/docker-stacks
 # https://hub.docker.com/u/jupyter/
-FROM jupyter/base-notebook:python-3.8.6 AS base-builder
 
 USER root
 
@@ -35,38 +35,14 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-
-# ------------------
-# Multi-stage-build:
-# ------------------
-
-FROM base-builder AS python-builder
-
-# Install Pipenv
-# --------------
-ARG PIP_NO_CACHE_DIR=0
-ARG PIPENV_RELEASE="2020.11.4"
-RUN pip install pipenv==$PIPENV_RELEASE
-
-# Install python libs
-# -------------------
-WORKDIR /tmp/lib
-COPY Pipfile* ./
-RUN pipenv install --system --deploy
-
-
-# ------------------
-# Multi-stage-build:
-# ------------------
-
-FROM base-builder
-
-USER root
-
-# Copy python dependencies
-# ------------------------
-COPY --from=python-builder $CONDA_DIR/lib/python3.8/site-packages $CONDA_DIR/lib/python3.8/site-packages
-RUN fix-permissions $CONDA_DIR/lib/python3.8/site-packages
+# Install packages
+# ----------------
+COPY environment.yml /tmp/
+RUN conda env update -q -f /tmp/environment.yml \
+    && conda clean --all -f -y \
+    && fix-permissions $CONDA_DIR \
+    && rm -rf /home/$NB_USER/work \
+    && fix-permissions /home/$NB_USER
 
 # Install extensions
 # ----------------
@@ -86,9 +62,6 @@ RUN fix-permissions $CONDA_DIR/lib/python3.8/site-packages
 # https://github.com/jupyterlab/jupyterlab-toc
 # https://github.com/aquirdTurtle/Collapsible_Headings
 
-# @jupyterlab/debugger \normally included in lab 3.0. To be tested. TOC removed.
-# @jupyterlab/git lab and server extension normally not needed anymore in 0.30 compatible with Lab 3.0
-
 ARG LAB_EXTENSIONS=" \
     @jupyterlab/debugger \
     jupyterlab-plotly \
@@ -96,14 +69,16 @@ ARG LAB_EXTENSIONS=" \
     @voila-dashboards/jupyterlab-preview \
     dask-labextension \
     @jupyter-widgets/jupyterlab-manager \
-    jupyterlab-code-snippets \
-    @aquirdturtle/collapsible_headings \
     @jupyterlab/git \
+    jupyterlab-code-snippets \
+    @jupyterlab/toc \
+    @aquirdturtle/collapsible_headings \
     "
 
 
 ARG SERVER_EXTENSIONS=" \
     dask_labextension \
+    jupyterlab_git \
     "
 
 RUN jupyter labextension install --no-build --clean $LAB_EXTENSIONS \

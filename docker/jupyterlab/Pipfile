@@ -10,13 +10,4 @@ python_full_version = "3.8.6"
 allow_prereleases = true
 
 [packages]
-xeus-python = "*"
-matplotlib = "*"
-plotly = "*"
-voila = "*"
-dask-labextension = "*"
-jupyter-server-proxy = "*"
-ipywidgets = "*"
-jupyterlab-git = "==0.30.0b1"
-bqplot = "*"
-jupyter-flex = "*"
+jupyterlab-git = "==0.30.0b2"

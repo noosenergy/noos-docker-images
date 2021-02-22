@@ -23,7 +23,7 @@ jobs:
       - noos-ci/docker-build-image:
           registry-provider: docker
           image-context: ./docker/base
-          image-name: circleci
+          image-name: base
           image-tag: ${CIRCLE_SHA1}
 
   build-image-circleci:

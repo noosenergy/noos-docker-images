@@ -1,7 +1,7 @@
 # https://hub.docker.com/u/noosenergy/
 # https://github.com/jupyter/docker-stacks
 # https://hub.docker.com/u/jupyter/
-FROM jupyter/base-notebook:python-3.8.6 AS base-builder
+FROM jupyter/base-notebook:python-3.8.6
 
 USER root
 
@@ -41,44 +41,8 @@ COPY environment.yml /tmp/
 RUN conda env update -q -f /tmp/environment.yml \
     && conda clean --all -f -y
 
-# ------------------
-# Multi-stage-build:
-# ------------------
-
-FROM base-builder AS python-builder
-
-# Install Pipenv
-# --------------
-ARG PIP_NO_CACHE_DIR=0
-ARG PIPENV_RELEASE="2020.11.4"
-RUN pip install pipenv==$PIPENV_RELEASE
-
-# Install PyPI packages
-# -------------------
-WORKDIR /tmp/lib
-COPY Pipfile* ./
-RUN pipenv install --system --deploy
-
-# ------------------
-# Multi-stage-build:
-# ------------------
-
-FROM base-builder
-
-USER root
-
-# # Copy PyPI packages dependencies
-# # ------------------------
-# # does not work for jupyterlab-git
-# COPY --from=python-builder $CONDA_DIR/lib/python3.8/site-packages $CONDA_DIR/lib/python3.8/site-packages
-# RUN fix-permissions $CONDA_DIR/lib/python3.8/site-packages
-# # works when not copying directory from multistage build
-RUN pip install jupyterlab-git==0.30.0b2
-
 # Install extensions
 # ----------------
-# https://github.com/jupyterlab/debugger
-# https://www.npmjs.com/package/@jupyterlab/debugger
 # https://github.com/plotly/plotly.py
 # https://www.npmjs.com/package/jupyterlab-plotly
 # https://github.com/voila-dashboards/voila
@@ -88,13 +52,9 @@ RUN pip install jupyterlab-git==0.30.0b2
 # https://github.com/jupyter-widgets/ipywidgets
 # https://www.npmjs.com/package/@jupyter-widgets/jupyterlab-manager
 # https://github.com/jupyterlab/jupyterlab-git
-# https://www.npmjs.com/package/@jupyterlab/git
 # https://github.com/jupytercalpoly/jupyterlab-code-snippets
-# https://github.com/jupyterlab/jupyterlab-toc
 # https://github.com/aquirdTurtle/Collapsible_Headings
 
-# @jupyterlab/debugger an toc included in lab 3.0.
-# @jupyterlab/git not stable yet
 # @voila-dashboards/jupyterlab-preview can't build with 2.0.1
 
 ARG LAB_EXTENSIONS=" \

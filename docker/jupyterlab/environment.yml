@@ -9,7 +9,8 @@ dependencies:
   - dask-labextension
   - jupyter-server-proxy
   - ipywidgets
-  # installing through pip to get latest stable version
-  # - jupyterlab-git
   - bqplot
   - jupyter-flex
+  # installing jupyterlab-git through pip to get latest stable version
+  - pip:
+    - jupyterlab-git==0.30.0b2

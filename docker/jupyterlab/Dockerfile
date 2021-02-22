@@ -33,13 +33,20 @@ ARG APT_DEPS=" \
 RUN apt-get update \
     && apt-get install -y --no-install-recommends $APT_DEPS \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* /var/cache/fontconfig/*
 
 # Install Conda packages
 # ----------------
 COPY environment.yml /tmp/
-RUN conda env update -q -f /tmp/environment.yml \
-    && conda clean --all -f -y
+RUN conda install nomkl \
+    && conda env update -q -f /tmp/environment.yml \
+    && conda clean --all -f -y \
+    && rm -rf /home/$NB_USER/work \
+    && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \
+    && find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete \
+    && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \
+    && find ${CONDA_DIR}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete \
+    && fix-permissions $CONDA_DIR
 
 # Install extensions
 # ----------------
@@ -77,7 +84,8 @@ RUN jupyter labextension install --no-build --clean $LAB_EXTENSIONS \
     && rm -rf ${HOME}/.cache ${HOME}/.npm ${HOME}/.yarn \
     && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \
     && find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete \
-    && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete
+    && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \
+    && fix-permissions $CONDA_DIR
 
 # Configure extensions
 # --------------------
@@ -88,10 +96,6 @@ COPY settings/ ${CONDA_DIR}/share/jupyter/lab/settings
 # --------------------
 ARG NODE_OPTIONS=--max-old-space-size=4096
 RUN jupyter lab clean \
-    && jupyter lab build --dev-build=False --name='Neptune' \
-    # Fix permissions and clean image
-    && rm -rf /home/$NB_USER/work \
-    && fix-permissions $CONDA_DIR \
-    && fix-permissions /home/$NB_USER
+    && jupyter lab build --dev-build=False --name='Neptune'
 
 USER $NB_UID

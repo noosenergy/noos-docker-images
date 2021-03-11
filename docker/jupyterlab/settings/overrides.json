@@ -9,5 +9,9 @@
   },
   "@jupyterlab/apputils-extension:themes": {
     "theme": "JupyterLab Light"
+  },
+  "@jupyterlab/git:plugin":{
+    "simpleStaging": true,
+    "cancelPullMergeConflict": true
   }
 }

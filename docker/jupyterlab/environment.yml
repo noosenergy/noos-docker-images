@@ -10,7 +10,6 @@ dependencies:
   - jupyter-server-proxy
   - ipywidgets
   - bqplot
-  - jupyter-flex
   # installing jupyterlab-git through pip to get latest stable version
   - pip:
     - jupyterlab-git==0.30.0b2

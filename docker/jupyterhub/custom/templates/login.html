@@ -1,21 +1,23 @@
+<!-- https://github.com/jupyterhub/jupyterhub/tree/master/share/jupyterhub/templates -->
 {% extends "templates/login.html" %}
 
 {% block main %}
-<div class="container text-center">
+<div class="contained">
     <h1>{{ pangeo_hub_title or 'Neptune by Noos Energy' }}</h1>
-    <h2>{{ pangeo_hub_subtitle }}</h2>
-    <p>
-      {% if pangeo_welcome %}
-      {{ (pangeo_welcome | safe) }}
-      {% else %}
-      A proven, industry-leading data, analytics and artifical intelligence platform.
-      {% endif %}
-    </p>
 </div>
+
 {{ super() }}
 
-<footer class='navbar-default text-center'>
-    <p>Access is currently in Beta mode. To request a live demo and a trial login, visit <a href="http://noos.energy">noos.energy.</a></p>
+<footer>
+
+    <div class="row grid">
+        <div class="column">
+            <p class="fs-menu color--gray lh-text">© 2021 Noos Energy. All rights reserved.</p>
+        </div>
+    </div>
+
 </footer>
 
 {% endblock %}
+
+

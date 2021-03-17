@@ -1,22 +1,22 @@
 {% extends "templates/page.html" %}
 
 {% block stylesheet %}
-<link rel="stylesheet" href="{{ static_url("custom/css/pangeo-style.css") }}" type="text/css"/>
-<link rel="stylesheet" href="{{ static_url("css/style.min.css") }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ static_url("custom/css/neptune.css") }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ static_url("css/style.min.css") }}" type="text/css"/>
 {% endblock %}
 
 {% block favicon %}
-<link rel="icon" href="{{ static_url("custom/images/favicon.png") }}" type="image/png">
+    <link rel="icon" href="{{ static_url("custom/images/favicon.png") }}" type="image/png">
 {% endblock %}
 
 {% block logo %}
 <span id="jupyterhub-logo" class="pull-left">
-    <a href="{{logo_url or base_url}}">
-        <img src="{{static_url("custom/images/logo-reduced.svg") }}" alt="Noos Energy" class="jpy-logo" title="Home">
-    </a>
+    <img src='{{static_url("custom/images/logo-reduced.svg") }}' alt='Noos Energy' class='header--logo' title='Home'/></a>
 </span>
 {% endblock %}
 
 {% block title %}
     Neptune
 {% endblock %}
+
+

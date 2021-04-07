@@ -1,0 +1,37 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+python_full_version = "3.8.6"
+
+[pipenv]
+allow_prereleases = true
+
+[packages]
+# Data Science
+pandas = "*"
+s3fs = "*"
+pyarrow = "*"
+# Interfaces
+click = "*"
+requests = "*"
+
+[dev-packages]
+# Format
+black = "*"
+isort = "*"
+# Linter
+pydocstyle = "*"
+flake8 = "*"
+mypy = "*"
+# Testing
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+pytest-asyncio = "*"
+factory-boy = "*"
+# Debugging
+ipdb = "*"
+ipython = "*"

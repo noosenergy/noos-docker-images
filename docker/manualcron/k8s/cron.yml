@@ -1,10 +1,10 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: manualcron
+  name: download-rte-ccr
   namespace: noos-cron
 spec:
-  schedule: "0 12 * * *"
+  schedule: "10 12 * * *"
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
@@ -15,8 +15,73 @@ spec:
             - name: script
               image: 254367186279.dkr.ecr.eu-west-1.amazonaws.com/noos-prod/airflow-etl/worker
               imagePullPolicy: Always
-              args: ["python", "rte_api.py"]
+              args: ["python", "download_rte_ccr.py"]
               envFrom:
                 - secretRef:
                     name: manualcron-dotenv
-
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: sync-mf-nwp-models
+  namespace: noos-cron
+spec:
+  schedule: "20 * * * *"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: script
+              image: 254367186279.dkr.ecr.eu-west-1.amazonaws.com/noos-prod/airflow-etl/worker
+              imagePullPolicy: Always
+              args: ["sh", "sync_mf_nwp_models.sh"]
+              envFrom:
+                - secretRef:
+                    name: manualcron-dotenv
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: download-mf-synop
+  namespace: noos-cron
+spec:
+  schedule: "22 */3 * * *"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: script
+              image: 254367186279.dkr.ecr.eu-west-1.amazonaws.com/noos-prod/airflow-etl/worker
+              imagePullPolicy: Always
+              args: ["python", "download_mf_synop.py"]
+              envFrom:
+                - secretRef:
+                    name: manualcron-dotenv
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: download-enedis-profils
+  namespace: noos-cron
+spec:
+  schedule: "30 5 * * *"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: script
+              image: 254367186279.dkr.ecr.eu-west-1.amazonaws.com/noos-prod/airflow-etl/worker
+              imagePullPolicy: Always
+              args: ["python", "download_enedis_profils.py"]
+              envFrom:
+                - secretRef:
+                    name: manualcron-dotenv

@@ -85,3 +85,69 @@ spec:
               envFrom:
                 - secretRef:
                     name: manualcron-dotenv
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: etl-enedis-profils
+  namespace: noos-cron
+spec:
+  schedule: "40 5 * * *"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: script
+              image: 254367186279.dkr.ecr.eu-west-1.amazonaws.com/noos-prod/airflow-etl/worker
+              imagePullPolicy: Always
+              args: ["python", "etl_enedis_profils.py"]
+              envFrom:
+                - secretRef:
+                    name: manualcron-dotenv
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: etl-mf-synop
+  namespace: noos-cron
+spec:
+  schedule: "55 5 * * *"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: script
+              image: 254367186279.dkr.ecr.eu-west-1.amazonaws.com/noos-prod/airflow-etl/worker
+              imagePullPolicy: Always
+              args: ["python", "etl_mf_synop.py"]
+              envFrom:
+                - secretRef:
+                    name: manualcron-dotenv
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: etl-mf-forecasts
+  namespace: noos-cron
+spec:
+  schedule: "58 5,11,17,23 * * *"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: script
+              image: 254367186279.dkr.ecr.eu-west-1.amazonaws.com/noos-prod/airflow-etl/worker
+              imagePullPolicy: Always
+              args: ["python", "etl_mf_forecasts.py"]
+              envFrom:
+                - secretRef:
+                    name: manualcron-dotenv

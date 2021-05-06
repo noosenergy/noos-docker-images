@@ -1,41 +1,25 @@
 import datetime as dt
 import logging
 import os
-from functools import wraps
 
 import click
 import pandas as pd
 import pytz
 import requests
+import utils
 from click import types as click_types
+from utils import log_args
 
 ###################
 # Logging
 ###################
 
-
 logger = logging.getLogger(__name__)
-
-
-def log_args(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        # Log pre-processing
-        msg = f"Starting {func.__name__} command "
-        msg += "".join([f"{key}: {str(value)} " for key, value in kwargs.items()])
-        logger.info(msg)
-
-        # Function call
-        func(*args, **kwargs)
-
-        # Log post-processing
-        logger.info(f"Completing {func.__name__} command")
-
-    return wrapper
+utils.setup_logging()
 
 
 ###################
-# RTE functions
+# Functions
 ###################
 
 

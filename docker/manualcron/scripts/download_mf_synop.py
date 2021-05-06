@@ -1,10 +1,11 @@
 import datetime as dt
 import logging
-from functools import wraps
 
 import click
 import pandas as pd
+import utils
 from click import types as click_types
+from utils import log_args
 
 ###################
 # Logging
@@ -12,23 +13,7 @@ from click import types as click_types
 
 
 logger = logging.getLogger(__name__)
-
-
-def log_args(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        # Log pre-processing
-        msg = f"Starting {func.__name__} command "
-        msg += "".join([f"{key}: {str(value)} " for key, value in kwargs.items()])
-        logger.info(msg)
-
-        # Function call
-        func(*args, **kwargs)
-
-        # Log post-processing
-        logger.info(f"Completing {func.__name__} command")
-
-    return wrapper
+utils.setup_logging()
 
 
 ###################
@@ -36,7 +21,7 @@ def log_args(func):
 ###################
 
 # Downloads raw data from mf server. Data available in H+3 every 3h
-def save_mf_synop_data(data_date: dt.datetime, s3_bucket: str):
+def save_mf_synop_data(data_date: dt.date, s3_bucket: str):
     # Source
     root_url = (
         "https://donneespubliques.meteofrance.fr/donnees_libres/Txt/Synop/Archive/"

@@ -1,14 +1,15 @@
 import datetime as dt
 import logging
-from functools import wraps
 from io import BytesIO
 from typing import Dict
 
 import click
 import pandas as pd
 import requests
+import utils
 from click import types as click_types
 from dateutil import relativedelta
+from utils import log_args
 
 ###################
 # Logging
@@ -16,23 +17,7 @@ from dateutil import relativedelta
 
 
 logger = logging.getLogger(__name__)
-
-
-def log_args(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        # Log pre-processing
-        msg = f"Starting {func.__name__} command "
-        msg += "".join([f"{key}: {str(value)} " for key, value in kwargs.items()])
-        logger.info(msg)
-
-        # Function call
-        func(*args, **kwargs)
-
-        # Log post-processing
-        logger.info(f"Completing {func.__name__} command")
-
-    return wrapper
+utils.setup_logging()
 
 
 ###################
@@ -110,6 +95,7 @@ __all__ = [
 ]
 
 TODAY = dt.date.today()
+LAST_WEEK = TODAY - relativedelta.relativedelta(days=7)
 S3_BUCKET = "s3://noos-prod-neptune-services/Raw/ENEDIS/"
 
 DATETIME_FORMAT = ["%Y-%m-%d", "%Y-%m-%dT%H:%M:%S"]
@@ -137,13 +123,11 @@ def save_enedis_main_profils_data_command(
     logger.info(msg)
 
 
-last_week = TODAY - relativedelta.relativedelta(days=7)
-
 if __name__ == "__main__":
 
     save_enedis_main_profils_data(
         dataset="coefficients-des-profils",
-        data_date=last_week,
+        data_date=LAST_WEEK,
         s3_bucket=S3_BUCKET,
     )
     save_enedis_main_profils_data(

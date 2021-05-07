@@ -23,6 +23,7 @@ click = "*"
 requests = "*"
 pyyaml = "*"
 xarray = "*"
+cfgrib = "*"
 
 [dev-packages]
 # Format

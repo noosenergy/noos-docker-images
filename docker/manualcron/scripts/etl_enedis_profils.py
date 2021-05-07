@@ -34,10 +34,13 @@ def extract_pivot_profil_data(
         index=False,
     ).compute()
 
+    # Set datetime index
     iso_format = "%Y-%m-%dT%H:%M:%S%z"
     df["delivery_from"] = pd.to_datetime(df.horodate, format=iso_format, utc=True)
 
-    return df.pivot(index="delivery_from", columns="sous_profil", values=value)
+    df = df.rename(columns={"sous_profil": "profile_class"}).drop_duplicates()
+
+    return df.pivot(index="delivery_from", columns="profile_class", values=value)
 
 
 def save_enedis_profils(
@@ -51,7 +54,7 @@ def save_enedis_profils(
     df = extract_pivot_profil_data(dataset, value, s3_bucket, filters)
 
     hive_partitions = {
-        "type": "COEFFICIENT",
+        "type": "PROFILE_COEFFICIENT",
         "asset": "PWRTE",
         "category": "DYNAMIQUE",
         "settlement_run": settlement_run,

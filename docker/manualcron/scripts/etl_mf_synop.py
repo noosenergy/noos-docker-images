@@ -39,30 +39,9 @@ def pivot_t_data(synop_df: pd.DataFrame) -> pd.DataFrame:
 
     # Set datetime index
     df["delivery_from"] = pd.to_datetime(df.date, format=meteo_format, utc=True)
-    df = df.drop_duplicates()
+    df = df.rename(columns={"numer_sta": "station_id"}).drop_duplicates()
 
-    return df.pivot(columns="numer_sta", values="t", index="delivery_from")
-
-
-# def remove_stations(pivot_df: pd.DataFrame) -> pd.DataFrame:
-#     # Metropolitan stations start with 07
-#     met_station_prefix = "07"
-#     # 07661 (Cap Cepet) stopped temp in 2020
-#     met_station_to_remove = ["07661"]
-#     # The following have large mean or std compared to forecasts
-#     large_mean = ["07471", "07591", "07761", "07790"]
-#     large_std = ["07207", "07591", "07643", "07761"]
-#
-#     non_met = [
-#         c
-#         for c in pivot_df.columns
-#         if c[: len(met_station_prefix)] != met_station_prefix
-#     ]
-#     # Remove stations with poor data
-#
-#     return pivot_df.drop(
-#         met_station_to_remove + large_mean + large_std + non_met, axis=1
-#     )
+    return df.pivot(columns="station_id", values="t", index="delivery_from")
 
 
 def fill_missing_values(pivot_df: pd.DataFrame) -> pd.DataFrame:

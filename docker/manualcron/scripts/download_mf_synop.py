@@ -1,6 +1,7 @@
 import datetime as dt
 import logging
 
+import awswrangler as wr
 import click
 import pandas as pd
 import utils
@@ -21,17 +22,11 @@ utils.setup_logging()
 ###################
 
 # Downloads raw data from mf server. Data available in H+3 every 3h
-def save_mf_synop_data(data_date: dt.date, s3_bucket: str):
+def save_mf_synop_data(data_date: dt.date, s3_bucket: str) -> None:
     # Source
     root_url = (
         "https://donneespubliques.meteofrance.fr/donnees_libres/Txt/Synop/Archive/"
     )
-
-    parquet_params = {
-        "index": False,
-        "engine": "pyarrow",
-        "compression": "snappy",
-    }
 
     columns_types = {
         "numer_sta": "str",
@@ -40,10 +35,10 @@ def save_mf_synop_data(data_date: dt.date, s3_bucket: str):
         "tend": "int",
         "cod_tend": "int",
         "dd": "int",
-        "ff": "float",
-        "t": "float",
+        "ff": pd.Float32Dtype(),
+        "t": pd.Float32Dtype(),
         "td": "float",
-        "u": pd.Int64Dtype(),
+        "u": pd.Int32Dtype(),
         "vv": "float",
         "ww": "int",
         "w1": "int",
@@ -54,7 +49,7 @@ def save_mf_synop_data(data_date: dt.date, s3_bucket: str):
         "cl": "int",
         "cm": "int",
         "ch": "int",
-        "pres": pd.Int64Dtype(),
+        "pres": pd.Int32Dtype(),
         "niv_bar": "int",
         "geop": "int",
         "tend24": "int",
@@ -95,7 +90,7 @@ def save_mf_synop_data(data_date: dt.date, s3_bucket: str):
         "hnuage4": "int",
     }
 
-    columns_to_keep = ["numer_sta", "date", "t", "ff", "u", "pres"]
+    vars_to_keep = ["t", "ff", "u", "pres"]
     filename = f"synop.{data_date:%Y}{data_date:%m}.csv.gz"
 
     data = pd.read_csv(
@@ -103,16 +98,20 @@ def save_mf_synop_data(data_date: dt.date, s3_bucket: str):
         delimiter=";",
         header=0,
         na_values="mq",
-        usecols=columns_to_keep,
+        usecols=["numer_sta", "date"] + vars_to_keep,
         dtype=columns_types,
     ).dropna(axis="columns", how="all")
-    clean_data = data.drop_duplicates()
-    clean_data.to_parquet(
-        s3_bucket + f"synop/YEAR={data_date:%Y}/MONTH={data_date:%m}/synop.parquet",
-        **parquet_params,
+
+    wr.s3.to_parquet(
+        df=data.drop_duplicates(),
+        path=f"{s3_bucket}Raw/METEOFRANCE/synop/year={data_date:%Y}/month={data_date:%m}/",
+        dataset=True,
+        index=False,
+        compression="snappy",
+        mode="overwrite_partitions",
     )
     nb_duplicates = data.duplicated().sum()
-    return (
+    logger.info(
         f"{filename} synced in: {s3_bucket}"
         f"{f' ... found {nb_duplicates} duplicates' if nb_duplicates>0 else ''}"
     )
@@ -122,12 +121,8 @@ def save_mf_synop_data(data_date: dt.date, s3_bucket: str):
 # Commands
 ###################
 
-__all__ = [
-    "save_mf_synop_data_command",
-]
-
 TODAY = dt.date.today()
-S3_BUCKET = "s3://noos-prod-neptune-services/Raw/METEOFRANCE/"
+S3_BUCKET = "s3://noos-prod-neptune-services/"
 
 DATETIME_FORMAT = ["%Y-%m-%d", "%Y-%m-%dT%H:%M:%S"]
 
@@ -146,9 +141,11 @@ def save_mf_synop_data_command(
     s3_bucket: str,
 ):
     """Fetch Meteo France synop data and save chosen parameters to s3 bucket."""
-    msg = save_mf_synop_data(data_date=published_for.date(), s3_bucket=s3_bucket)
-    logger.info(msg)
+    save_mf_synop_data(data_date=published_for.date(), s3_bucket=s3_bucket)
 
 
 if __name__ == "__main__":
-    save_mf_synop_data_command()
+    try:
+        save_mf_synop_data_command()
+    except Exception as e:
+        logger.error(e)

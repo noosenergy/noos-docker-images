@@ -2,6 +2,17 @@ FROM python:3.8.6-slim as builder
 
 USER root
 
+# Install OS dependencies
+# -----------------------
+ARG APT_DEPS=" \
+    libeccodes0 \
+    "
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends $APT_DEPS \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/fontconfig/*
+
 # Install Pipenv
 # --------------
 ARG PIP_NO_CACHE_DIR=0

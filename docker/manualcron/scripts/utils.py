@@ -5,11 +5,11 @@ import os
 from functools import wraps
 from typing import Dict
 
+import awswrangler as wr
+import numpy as np
 import pandas as pd
 import yaml
-
-__all__ = ["setup_logging", "hive_parquet_save", "rounddown_time", "log_args"]
-
+from sklearn.impute import KNNImputer
 
 ###################
 # Logging
@@ -63,11 +63,57 @@ def log_args(func):
 # Functions
 ###################
 
-
-def hive_parquet_save(
+# Not working without s3fs
+def hive_pandas_parquet_save(
     df: pd.DataFrame,
     s3_bucket: str,
     hive_partitions: Dict[str, str],
+    df_columns_type: Dict[str, str],
+) -> None:
+    """Save a dataframe in a partitioned parquet.
+
+    :param df: dataframe to save
+    :param df_columns_type: dictionary of columns to keep with type (order matters)
+    :param s3_bucket: s3 bucket including store path
+    :param hive_partitions: dictionary of partitions.
+            Example: {
+                'type': 'WEATHER',
+                'asset': 'T_2M',
+                'category': 'ARPEGE',
+                'settlement_run': 'PREV',
+                'created_at': '20210501T06:00:00',
+                }
+    :return: None
+    """
+    df = df[list(df_columns_type.keys())].astype(df_columns_type)
+    for key, value in hive_partitions.items():
+        df[key] = value
+
+    parquet_params = {
+        "index": False,
+        "engine": "pyarrow",
+        "compression": "snappy",
+    }
+
+    df.to_parquet(
+        s3_bucket, partition_cols=list(hive_partitions.keys()), **parquet_params
+    )
+
+
+def setup_wrangler():
+    # https://github.com/awslabs/aws-data-wrangler/blob/
+    # 2da313473e6426128fff0111ae819fb55ccc87ee/tutorials/021%20-%20Global%20Configurations.ipynb
+    pass
+
+
+def datalake_wrangler_save(
+    df: pd.DataFrame,
+    s3_bucket: str,
+    hive_partitions: Dict[str, str],
+    df_columns_type: Dict[str, str] = None,
+    mode: str = "append",
+    # database: str,
+    # table: str,
 ) -> None:
     """Save a dataframe in a partitioned parquet.
 
@@ -81,19 +127,28 @@ def hive_parquet_save(
                 'settlement_run': 'PREV',
                 'created_at': '20210501T06:00:00',
                 }
+    :param df_columns_type: dictionary of columns to keep with type (order matters)
+    :param mode: default `overwrite_partitions` to append to existing dataset avoiding duplicates
     :return: None
     """
+    setup_wrangler()
+
+    # Athena dtype are specific: https://docs.aws.amazon.com/athena/latest/ug/data-types.html
+    if df_columns_type is not None:
+        df = df[list(df_columns_type.keys())].astype(df_columns_type)
     for key, value in hive_partitions.items():
         df[key] = value
 
     parquet_params = {
         "index": False,
-        "engine": "pyarrow",
         "compression": "snappy",
+        "dataset": True,
+        "mode": mode,
+        "partition_cols": list(hive_partitions.keys()),
+        "use_threads": True,
     }
-    df.to_parquet(
-        s3_bucket, partition_cols=list(hive_partitions.keys()), **parquet_params
-    )
+
+    wr.s3.to_parquet(df=df, path=s3_bucket, **parquet_params)
 
 
 def rounddown_time(dt=None, timedelta=datetime.timedelta(minutes=1)):
@@ -112,3 +167,24 @@ def rounddown_time(dt=None, timedelta=datetime.timedelta(minutes=1)):
     # // is a floor division, not a comment on following line:
     rounding = seconds // round_to * round_to
     return dt + datetime.timedelta(0, rounding - seconds, -dt.microsecond)
+
+
+def interpolate_to_freq(df: pd.DataFrame, freq: str = "30T") -> pd.DataFrame:
+    # Linear interpolation as performed by enedis
+    index = pd.date_range(
+        start=df.index.min(), end=df.index.max(), freq=freq, name="delivery_from"
+    )
+    return df.reindex(index).interpolate(method="linear", axis=0)
+
+
+def fill_missing_values(pivot_df: pd.DataFrame) -> pd.DataFrame:
+    # Looking at the 4 closest stations in distance (t wise) to fill gaps
+    imputer = KNNImputer(n_neighbors=4, weights="distance")
+
+    return pd.DataFrame(
+        imputer.fit_transform(
+            pivot_df.transpose().to_numpy(dtype="float", na_value=np.nan)
+        ).transpose(),
+        columns=pivot_df.columns,
+        index=pivot_df.index,
+    )

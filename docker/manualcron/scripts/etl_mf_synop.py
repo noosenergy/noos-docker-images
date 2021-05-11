@@ -2,11 +2,10 @@
 
 import datetime as dt
 import logging
+from typing import List, Optional, Tuple
 
 import pandas as pd
 import utils
-from dask import dataframe as dd
-from sklearn.impute import KNNImputer
 
 ###################
 # Logging
@@ -20,87 +19,125 @@ utils.setup_logging()
 # Functions
 ###################
 
-
-def extract_t_data(from_year: int, s3_bucket: str) -> pd.DataFrame:
-    columns_to_extract = ["numer_sta", "date", "t"]
-    filters = [[("YEAR", ">=", from_year)]]
-    df = dd.read_parquet(
-        f"{s3_bucket}Raw/METEOFRANCE/synop/",
-        columns=columns_to_extract,
-        filters=filters,
-        index=False,
-    ).compute()
-    return df
+# important for a consistent parquet schema in the datalake
+COLUMNS_TYPE = {
+    "station_id": "str",
+    "delivery_from": "datetime64[ns, UTC]",
+    "t": "float32",
+}
 
 
-def pivot_t_data(synop_df: pd.DataFrame) -> pd.DataFrame:
-    meteo_format = "%Y%m%d%H%M%S"
-    df = synop_df.copy()
+def extract_t_data(
+    s3_bucket: str,
+    partition_filter: Optional[List[List[Tuple[str, str, str]]]] = None,
+) -> pd.DataFrame:
+    vars_to_keep = ["t"]
+
+    df = pd.read_parquet(
+        path=f"{s3_bucket}Raw/METEOFRANCE/synop/",
+        columns=["numer_sta", "date"] + vars_to_keep,
+        filters=partition_filter,
+    )
+
+    # Clean data from duplicates and NA on vars
+    df = df.drop_duplicates()
+    df = df[~df[vars_to_keep].isna().all(axis=1)]
 
     # Set datetime index
+    meteo_format = "%Y%m%d%H%M%S"
     df["delivery_from"] = pd.to_datetime(df.date, format=meteo_format, utc=True)
-    df = df.rename(columns={"numer_sta": "station_id"}).drop_duplicates()
 
-    return df.pivot(columns="station_id", values="t", index="delivery_from")
-
-
-def fill_missing_values(pivot_df: pd.DataFrame) -> pd.DataFrame:
-    # Looking at the 4 closest stations in distance (t wise) to fill gaps
-    imputer = KNNImputer(n_neighbors=4, weights="distance")
-
-    return pd.DataFrame(
-        imputer.fit_transform(pivot_df.transpose().to_numpy()).transpose(),
-        columns=pivot_df.columns,
-        index=pivot_df.index,
-    )
+    return df.rename(columns={"numer_sta": "station_id"}).drop_duplicates()
 
 
-def interpolate_to_hh(df: pd.DataFrame) -> pd.DataFrame:
-    # Linear interpolation as performed by enedis
-    index = pd.date_range(start=df.index.min(), end=df.index.max(), freq="30T")
-    return df.reindex(index).interpolate(method="linear", axis=0)
+def save_t_data_yearly_tall(
+    run_date: dt.date,
+    s3_bucket: str,
+):
+    # filling missing value with minimum 1 year of data
+    partition_filter = [[("year", ">=", str(run_date.year - 1))]]
+    df = extract_t_data(s3_bucket=s3_bucket, partition_filter=partition_filter)
 
+    # pivot needed to fill and interpolate data
+    pivot_df = df.pivot(
+        index="delivery_from", columns="station_id", values="t"
+    ).sort_index()
+    pivot_df = utils.fill_missing_values(pivot_df)
+    pivot_df = utils.interpolate_to_freq(pivot_df)
 
-def create_output_path(run_date: dt.date, s3_bucket: str) -> str:
-    now = dt.datetime.now()
-    return (
-        f"{s3_bucket}Staging/Extracts/type=WEATHER/asset=T2M/"
-        f"category=SYNOP/settlement_run=HISTORICAL/"
-        f"valid_at={run_date.isoformat()}/{now.isoformat()}.parquet"
-    )
-
-
-def etl_synop(run_date: dt.date, from_year: int, s3_bucket: str):
-    df = extract_t_data(from_year=from_year, s3_bucket=s3_bucket)
-    df = pivot_t_data(df)
-    df = fill_missing_values(df)
-    df = interpolate_to_hh(df)
+    # saving only 1 day in tall format
+    pivot_df = pivot_df.loc[f"{run_date:%Y}"]
+    tall_df = pivot_df.reset_index().melt(id_vars="delivery_from", value_name="t")
 
     hive_partitions = {
-        "type": "WEATHER",
         "asset": "T2M",
         "category": "SYNOP",
-        "settlement_run": "ACT",
-        "created_at": f"{run_date:%Y-%m-%dT%H:%M:%S}",
+        "year": f"{run_date:%Y}",
     }
-    utils.hive_parquet_save(
-        df=df.reset_index(),
-        s3_bucket=f"{s3_bucket}Staging/Extracts/",
+    utils.datalake_wrangler_save(
+        df=tall_df,
+        s3_bucket=f"{s3_bucket}Store/Datalakes/WEATHER/",
         hive_partitions=hive_partitions,
+        df_columns_type=COLUMNS_TYPE,
+        mode="overwrite_partitions",
     )
 
-    logger.info(f"mf synop for {run_date:%Y-%m-%d} saved in {s3_bucket}")
+    logger.info(
+        f"tall mf synop for {run_date:%Y} saved in {s3_bucket}Store/Datalakes/WEATHER/"
+    )
+
+
+def save_t_data_full_pivot(
+    run_date: dt.date,
+    s3_bucket: str,
+):
+    # Taking data from 2018 onwards in Datalake
+    partition_filter = [[("year", ">=", "2018")]]
+    df = pd.read_parquet(
+        f"{s3_bucket}Store/Datalakes/WEATHER/",
+        columns=list(COLUMNS_TYPE.keys()),
+        filters=partition_filter,
+    )
+    pivot_df = df.drop_duplicates(["station_id", "delivery_from"]).pivot(
+        index="delivery_from", columns="station_id", values="t"
+    )
+
+    hive_partitions = {
+        "asset": "T2M",
+        "category": "SYNOP",
+        "created_at": run_date.isoformat(),
+    }
+    # Saving in Staging
+    utils.datalake_wrangler_save(
+        df=pivot_df,
+        s3_bucket=f"{s3_bucket}Staging/Extracts/WEATHER/",
+        hive_partitions=hive_partitions,
+        mode="overwrite",
+    )
+
+    logger.info(
+        f"full pivot mf synop for {run_date:%Y-%m-%d} "
+        f"saved in {s3_bucket}Staging/Extracts/"
+    )
 
 
 ###################
 # Commands
 ###################
 
-__all__ = [
-    "etl_synop",
-]
 TODAY = dt.date.today()
 S3_BUCKET = "s3://noos-prod-neptune-services/"
 
 if __name__ == "__main__":
-    etl_synop(run_date=TODAY, from_year=2016, s3_bucket=S3_BUCKET)
+
+    # Save daily files in datalake
+    save_t_data_yearly_tall(
+        run_date=TODAY,
+        s3_bucket=S3_BUCKET,
+    )
+
+    # Save full data as pivot in Staging for quick access
+    save_t_data_full_pivot(
+        run_date=TODAY,
+        s3_bucket=S3_BUCKET,
+    )

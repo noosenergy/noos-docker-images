@@ -15,7 +15,9 @@ pandas = "*"
 s3fs = "*"
 pyarrow = "*"
 sklearn = "*"
-#dask = "*"
+# Automation
+papermill = "*"
+ipykernel = "*"
 # Interfaces
 # for compatibility with s3fs boto https://pypi.org/project/botocore/#history
 botocore = "==1.20.49"

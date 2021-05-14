@@ -134,6 +134,7 @@ def datalake_wrangler_save(
     setup_wrangler()
 
     # Athena dtype are specific: https://docs.aws.amazon.com/athena/latest/ug/data-types.html
+    # Using the same order as in df_columns_type
     if df_columns_type is not None:
         df = df[list(df_columns_type.keys())].astype(df_columns_type)
     for key, value in hive_partitions.items():

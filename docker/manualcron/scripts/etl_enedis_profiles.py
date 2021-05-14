@@ -72,7 +72,7 @@ def save_profile_data_act_tall(
         "asset": "PWRTE",
         "category": "DYNAMIC",
         "settlement_run": "ACT",
-        "year": f"{run_date:%Y}",
+        "created_at": f"{run_date:%Y-%m-%dT00:00:00}",
     }
     utils.datalake_wrangler_save(
         df=tall_act_df.drop_duplicates(),
@@ -83,7 +83,7 @@ def save_profile_data_act_tall(
     )
 
     logger.info(
-        f"tall enedis act profiles for {run_date:%Y} "
+        f"tall enedis ACT profiles for {run_date:%Y} "
         f"saved in {s3_bucket}Store/Datalakes/PROFILE_COEFFICIENT/"
     )
 
@@ -105,7 +105,7 @@ def save_profile_data_prov_tall(
         "asset": "PWRTE",
         "category": "DYNAMIC",
         "settlement_run": "PROV_1D",
-        "year": f"{run_date:%Y}",
+        "created_at": f"{run_date:%Y-%m-%dT00:00:00}",
     }
     utils.datalake_wrangler_save(
         df=tall_prov_df.drop_duplicates(),
@@ -116,7 +116,7 @@ def save_profile_data_prov_tall(
     )
 
     logger.info(
-        f"tall enedis prov profiles for {run_date:Y%} "
+        f"tall enedis PROV_1D profiles for {run_date:%Y} "
         f"saved in {s3_bucket}Store/Datalakes/PROFILE_COEFFICIENT/"
     )
 
@@ -163,7 +163,7 @@ def save_profile_data_full_pivot(
 
     logger.info(
         f"full pivot enedis profiles for {run_date:%Y-%m-%d} "
-        f"saved in {s3_bucket}Staging/Extracts/"
+        f"saved in {s3_bucket}Staging/Extracts/PROFILE_COEFFICIENT/"
     )
 
 
@@ -178,7 +178,7 @@ S3_BUCKET = "s3://noos-prod-neptune-services/"
 
 if __name__ == "__main__":
 
-    if LAST_2_WEEKS.month != TODAY.month:
+    if LAST_2_WEEKS.year != TODAY.year:
         save_profile_data_act_tall(
             run_date=LAST_2_WEEKS,
             s3_bucket=S3_BUCKET,

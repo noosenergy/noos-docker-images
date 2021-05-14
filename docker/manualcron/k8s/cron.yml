@@ -26,7 +26,7 @@ metadata:
   name: sync-mf-nwp-models
   namespace: noos-cron
 spec:
-  schedule: "20 * * * *"
+  schedule: "20 */3 * * *"
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
@@ -70,7 +70,7 @@ metadata:
   name: download-enedis-profiles-prov
   namespace: noos-cron
 spec:
-  schedule: "30 6 * * *"
+  schedule: "40 7 * * *"
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
@@ -114,7 +114,7 @@ metadata:
   name: etl-enedis-profiles
   namespace: noos-cron
 spec:
-  schedule: "45 6 * * *"
+  schedule: "45 7 * * *"
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
@@ -173,3 +173,66 @@ spec:
               envFrom:
                 - secretRef:
                     name: manualcron-dotenv
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: papermill-mint
+  namespace: noos-cron
+spec:
+  schedule: "5 8 * * *"
+  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: script
+              image: 254367186279.dkr.ecr.eu-west-1.amazonaws.com/noos-prod/airflow-etl/worker
+              imagePullPolicy: Always
+              args: [
+                  "python",
+                  "papermill_upload_coef_volumes_mint.py",
+              ]
+              envFrom:
+                - secretRef:
+                    name: manualcron-dotenv
+              volumeMounts:
+                - name: webserver-templates
+                  mountPath: /papermill
+                  subPath: noos-notebooks/papermill
+
+          initContainers:
+            - name: gitsync
+              image: k8s.gcr.io/git-sync:v3.1.6
+              imagePullPolicy: IfNotPresent
+              args:
+                - "--ssh"
+                - "--repo=git@github.com:noosenergy/noos-notebooks.git"
+                - "--branch=master"
+                - "--depth=1"
+                - "--root=/tmp/git-sync"
+                - "--dest=noos-notebooks"
+                - "--one-time"
+              securityContext:
+                runAsUser: 65533 # git-sync user
+              volumeMounts:
+                - name: git-secret
+                  mountPath: /etc/git-secret
+                - name: webserver-templates
+                  # Home default for container
+                  mountPath: /tmp/git-sync
+
+          volumes:
+            - name: git-secret
+              secret:
+                secretName: git-creds
+                defaultMode: 0400
+            - name: webserver-templates
+              emptyDir: { }
+
+          securityContext:
+            fsGroup: 65533 # to make SSH key readable

@@ -87,6 +87,11 @@ RUN jupyter labextension install --no-build --clean $LAB_EXTENSIONS \
     && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \
     && fix-permissions $CONDA_DIR
 
+# Configure extensions
+# --------------------
+# https://jupyterlab.readthedocs.io/en/stable/user/extensions.html#settings
+COPY settings/ ${CONDA_DIR}/share/jupyter/lab/settings
+
 # Build all extensions
 # --------------------
 ARG NODE_OPTIONS=--max-old-space-size=4096

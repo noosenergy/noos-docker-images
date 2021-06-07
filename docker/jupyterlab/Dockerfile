@@ -62,7 +62,7 @@ RUN conda install nomkl \
 # https://github.com/jupytercalpoly/jupyterlab-code-snippets
 # https://github.com/aquirdTurtle/Collapsible_Headings
 
-# @voila-dashboards/jupyterlab-preview can't build with 2.0.1
+# jupyterlab can't build with @voila-dashboards/jupyterlab-preview@2.0.1
 
 ARG LAB_EXTENSIONS=" \
     jupyterlab-plotly \
@@ -70,7 +70,7 @@ ARG LAB_EXTENSIONS=" \
     @voila-dashboards/jupyterlab-preview@2.0.0 \
     dask-labextension \
     @jupyter-widgets/jupyterlab-manager \
-    jupyterlab-code-snippets \
+    jupyterlab-code-snippets@2.1.0 \
     @aquirdturtle/collapsible_headings \
     "
 
@@ -86,11 +86,6 @@ RUN jupyter labextension install --no-build --clean $LAB_EXTENSIONS \
     && find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete \
     && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \
     && fix-permissions $CONDA_DIR
-
-# Configure extensions
-# --------------------
-# https://jupyterlab.readthedocs.io/en/stable/user/extensions.html#settings
-COPY settings/ ${CONDA_DIR}/share/jupyter/lab/settings
 
 # Build all extensions
 # --------------------

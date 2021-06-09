@@ -38,8 +38,7 @@ RUN apt-get update \
 # Install Conda packages
 # ----------------
 COPY environment.yml /tmp/
-RUN conda install nomkl \
-    && conda env update -q -f /tmp/environment.yml \
+RUN conda env update -q -f /tmp/environment.yml \
     && conda clean --all -f -y \
     && rm -rf /home/$NB_USER/work \
     && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \

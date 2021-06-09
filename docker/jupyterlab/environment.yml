@@ -2,13 +2,16 @@ name: base
 channels:
   - conda-forge
 dependencies:
+  - nomkl
   - xeus-python
   - matplotlib
   - plotly
   - voila
-  - dask-labextension
-  - jupyter-server-proxy
   - ipywidgets
   - bqplot
   - cfgrib
   - jupyterlab-git
+  - dask-labextension
+  # TODO: follow issue
+  # https://github.com/jupyterlab/jupyterlab/issues/10228
+  - nbclassic>=0.2.8

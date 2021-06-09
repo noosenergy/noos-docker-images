@@ -16,16 +16,6 @@ orbs:
 
 jobs:
 
-  build-image-base:
-    executor: noos-ci/default
-    steps:
-      - checkout
-      - noos-ci/docker-build-image:
-          registry-provider: docker
-          image-context: ./docker/base
-          image-name: base
-          image-tag: ${CIRCLE_SHA1}
-
   build-image-circleci:
     executor: noos-ci/default
     steps:
@@ -72,20 +62,6 @@ jobs:
 # -----------------
 
 workflows:
-
-  build-image-base:
-    jobs:
-      - hold:
-          type: approval
-          filters: &filter-master-only
-            branches:
-              only: master
-      - build-image-base:
-          context: CIRCLECI_SHARED
-          requires:
-            - hold
-          filters:
-            <<: *filter-master-only
 
   build-image-circleci:
     jobs:

@@ -89,7 +89,12 @@ RUN jupyter labextension install --no-build --clean $LAB_EXTENSIONS \
 # Configure extensions
 # --------------------
 # https://jupyterlab.readthedocs.io/en/stable/user/extensions.html#settings
-COPY settings/ ${CONDA_DIR}/share/jupyter/lab/settings
+COPY lab/. ${CONDA_DIR}/share/jupyter/lab/settings
+
+# Configure nbconvert
+# --------------------
+COPY nbconvert/. /home/$NB_USER/.jupyter
+
 
 # Build all extensions
 # --------------------

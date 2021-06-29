@@ -20,10 +20,10 @@
       {
         "code": [
           "import datetime as dt",
+          "import pytz",
           "import pandas as pd",
           "import numpy as np",
-          "from dask import dataframe as dd",
-          ""
+          "from dask import dataframe as dd"
         ],
         "description": "Import main libraries",
         "id": 0,
@@ -35,10 +35,8 @@
       },
       {
         "code": [
-          "",
           "from IPython.core.interactiveshell import InteractiveShell",
-          "InteractiveShell.ast_node_interactivity = \"all\"",
-          ""
+          "InteractiveShell.ast_node_interactivity = \"all\""
         ],
         "description": "Enable multiple outputs per cell",
         "id": 2,
@@ -50,10 +48,8 @@
       },
       {
         "code": [
-          "",
           "pd.options.display.max_columns = 30",
-          "pd.options.display.max_rows = 100",
-          ""
+          "pd.options.display.max_rows = 100"
         ],
         "description": "Enable pandas max rows and max columns",
         "id": 3,

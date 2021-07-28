@@ -8,11 +8,13 @@ import pytz
 import requests
 import utils
 from click import types as click_types
-from utils import log_args
+
+import utils_rte
 
 ###################
 # Logging
 ###################
+
 
 logger = logging.getLogger(__name__)
 utils.setup_logging()
@@ -21,27 +23,6 @@ utils.setup_logging()
 ###################
 # Functions
 ###################
-
-
-def requestToken(rte_token):
-    """OAuth v.2 token request to RTE identification server.
-
-    :return: a token valid for 2 hours.
-    """
-    header = {"Authorization": "Basic " + rte_token}
-    r = requests.post(
-        "https://digital.iservices.rte-france.com/token/oauth/", headers=header
-    )
-    if r.status_code == requests.codes.ok:
-        access_token = r.json()["access_token"]
-        # print('Gathered token : ' + access_token)
-        return access_token
-    else:
-        return ""
-
-
-def headerWithToken(temp_token):
-    return {"Authorization": "Bearer " + temp_token}
 
 
 def param_dates_str(start_date: dt.datetime, end_date: dt.datetime):
@@ -64,7 +45,7 @@ def get_ccr(publication_date: dt.date, rte_token: str) -> pd.DataFrame:
         r = requests.get(
             rte_api_url + rte_api_endpoint + ncc,
             params=param_dates_str(start_date, end_date),
-            headers=headerWithToken(requestToken(rte_token)),
+            headers=utils_rte.header_with_token(rte_token),
         )
         if r.status_code == 200:
             temp_df = pd.json_normalize(r.json()[ncc])
@@ -90,9 +71,6 @@ def save_ccr(publication_date: dt.date, rte_token: str, s3_bucket: str) -> str:
 # Commands
 ###################
 
-__all__ = [
-    "save_ccr_command",
-]
 
 TODAY = dt.date.today()
 RTE_TOKEN = os.getenv("RTE_ID64")
@@ -112,7 +90,7 @@ DATETIME_FORMAT = ["%Y-%m-%d", "%Y-%m-%dT%H:%M:%S"]
     "--rte-token", help="RTE app token to authentify", type=str, default=RTE_TOKEN
 )
 @click.option("--s3-bucket", help="S3 bucket to save data", type=str, default=S3_BUCKET)
-@log_args
+@utils.log_args
 def save_ccr_command(
     published_at: dt.datetime,
     rte_token: str,

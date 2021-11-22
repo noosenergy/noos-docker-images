@@ -1,14 +1,15 @@
-FROM python:3.6.6-slim
+FROM python:3.8.6-slim
 
 USER root
 
 # Install postgresql-client
 # -------------------------
 ARG APT_DEPS=" \
-    postgresql-client-9.6 \
-    ca-certificates \
+    postgresql-client \
     groff \
     less \
+    wget \
+    unzip \
     "
 RUN mkdir -p /usr/share/man/man1 \
     && mkdir -p /usr/share/man/man7 \
@@ -18,9 +19,16 @@ RUN mkdir -p /usr/share/man/man1 \
 
 # Install AWS CLI
 # ---------------
-ARG AWS_CLI_VERSION="1.17.10"
+# https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+ARG AWS_ARCHIVE="awscli-exe-linux-x86_64.zip"
+ARG AWS_URL="https://awscli.amazonaws.com/${AWS_ARCHIVE}"
+ARG AWS_SRC="/tmp/awscli"
 ENV AWS_REGION="eu-west-1"
-RUN pip --no-cache-dir install awscli==${AWS_CLI_VERSION}
+WORKDIR $AWS_SRC
+RUN wget $AWS_URL \
+    && unzip $AWS_ARCHIVE \
+    && ./aws/install \
+    && rm -rf $AWS_SRC
 
 # Install config files
 # --------------------
@@ -29,9 +37,9 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Set unprivileged user
 # ---------------------
-RUN useradd -U noosbackup
-
-WORKDIR /tmp
-USER noosbackup
+ARG APP_USER="neptune"
+RUN useradd -m -U $APP_USER
+USER $APP_USER
+WORKDIR /home/${APP_USER}
 
 ENTRYPOINT ["docker-entrypoint.sh"]

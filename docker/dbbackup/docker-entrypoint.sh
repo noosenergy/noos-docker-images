@@ -4,11 +4,6 @@
 set -e
 
 # Check env variables aren't missing
-if [ -z "${DATABASE_PASSWORD}" ]; then
-  echo "$(date) - missing DATABASE_PASSWORD environment variable."
-  exit 1
-fi
-
 if [ -z "${DATABASE_BUCKET}" ]; then
   echo "$(date) - missing DATABASE_BUCKET environment variable."
   exit 1

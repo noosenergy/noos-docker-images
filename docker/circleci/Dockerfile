@@ -1,17 +1,6 @@
-FROM circleci/python:3.8.6
+FROM cimg/python:3.8.6
 
 USER root
-
-# Install OS dependencies
-# -----------------------
-ARG APT_DEPS=" \
-    # ---- Sphinx dependencies ---
-    pandoc \
-    "
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends $APT_DEPS \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
 
 # Install Python package managers
 # -------------------------------
@@ -23,7 +12,7 @@ RUN pip install pipenv==$PIPENV_RELEASE poetry==$POETRY_RELEASE
 
 # Install Noos CI/CD SDKs
 # -----------------------
-ARG NOOSINV_VERSION="0.0.6"
+ARG NOOSINV_VERSION="0.0.8"
 ARG NOOSTF_VERSION="0.0.6"
 RUN pip install noos-inv==$NOOSINV_VERSION noos-tf==$NOOSTF_VERSION
 

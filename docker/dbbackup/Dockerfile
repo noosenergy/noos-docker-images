@@ -23,7 +23,6 @@ RUN mkdir -p /usr/share/man/man1 \
 ARG AWS_ARCHIVE="awscli-exe-linux-x86_64.zip"
 ARG AWS_URL="https://awscli.amazonaws.com/${AWS_ARCHIVE}"
 ARG AWS_SRC="/tmp/awscli"
-ENV AWS_REGION="eu-west-1"
 WORKDIR $AWS_SRC
 RUN wget $AWS_URL \
     && unzip $AWS_ARCHIVE \

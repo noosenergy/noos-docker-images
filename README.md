@@ -2,7 +2,7 @@
 
 # Noos Forge
 
-Set of developer tools for working locally on the Neptune platform and build optimized base images:
+Set of developer tools for working locally on the Neptune platform and build optimized [Docker base images](https://hub.docker.com/u/noosenergy):
 
 * a [CircleCI image](./docker/circleci) for running CI/CD pipelines
 * a [backing-up service](./docker/dbbackup) for databases into local / remote storage
@@ -15,9 +15,9 @@ Set of developer tools for working locally on the Neptune platform and build opt
 
 On Mac OSX, make sure [Homebrew](https://brew.sh/) has been pre-configured, then install Docker,
 
-    ```sh
-    brew cask install docker
-    ```
+```sh
+brew cask install docker
+```
 
 ### Docker image optimisation
 
@@ -26,9 +26,9 @@ On Mac OSX, make sure [Homebrew](https://brew.sh/) has been pre-configured, then
 You can use [dive](https://github.com/wagoodman/dive) to look into the image build process and each layer.\
 Dive gives an "image efficiency" ratio and makes it easier to find wasted space in the final image.
 
-    ```sh
-    brew install dive
-    ```
+```sh
+brew install dive
+```
 
 #### Optimisation tips
 
@@ -41,7 +41,7 @@ Dive gives an "image efficiency" ratio and makes it easier to find wasted space 
 
 The development workflows of this project can be managed by [noos-invoke](https://github.com/noosenergy/noos-invoke), a ready-made CLI for common CI/CD tasks.
 
-    ```shell
-    ~$ noosinv
-    Usage: noosinv [--core-opts] <subcommand> [--subcommand-opts] ...
-    ```
+```shell
+~$ noosinv
+Usage: noosinv [--core-opts] <subcommand> [--subcommand-opts] ...
+```

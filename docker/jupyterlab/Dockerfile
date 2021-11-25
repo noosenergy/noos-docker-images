@@ -23,7 +23,6 @@ ARG APT_DEPS=" \
     texlive-xetex \
     texlive-fonts-recommended \
     texlive-plain-generic \
-    # ----
     tzdata \
     unzip \
     # ---- JSON document parser ---

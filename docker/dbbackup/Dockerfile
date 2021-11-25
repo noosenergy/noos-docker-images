@@ -5,13 +5,30 @@ USER root
 # Install Apt-packages
 # --------------------
 ARG APT_DEPS=" \
+    # --- AWS CLI deps ---
     ca-certificates \
+    wget \
+    groff \
+    less \
+    unzip \
+    # --- PostgreSQL deps ---
     lsb-release \
     gnupg \
-    wget \
     "
 RUN apt-get update \
     && apt-get install -y --no-install-recommends $APT_DEPS
+
+# Install AWSCLI
+# --------------
+# https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+ARG AWS_ARCHIVE="awscli-exe-linux-x86_64.zip"
+ARG AWS_URL="https://awscli.amazonaws.com/${AWS_ARCHIVE}"
+ARG AWS_SRC="/tmp/awscli"
+WORKDIR $AWS_SRC
+RUN wget $AWS_URL \
+    && unzip $AWS_ARCHIVE \
+    && ./aws/install \
+    && rm -rf $AWS_SRC
 
 # Install PostgreSQL-client
 # -------------------------
@@ -24,27 +41,8 @@ RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-
     && mkdir -p /usr/share/man/man1 \
     && mkdir -p /usr/share/man/man7 \
     && apt-get update \
-    && apt-get install -y --no-install-recommends $PG_DEPS
-
-# Install AWSCLI
-# --------------
-# https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-ARG AWS_DEPS=" \
-    groff \
-    less \
-    unzip \
-    "
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends $AWS_DEPS \
-	&& rm -rf /var/lib/apt/lists/*
-ARG AWS_ARCHIVE="awscli-exe-linux-x86_64.zip"
-ARG AWS_URL="https://awscli.amazonaws.com/${AWS_ARCHIVE}"
-ARG AWS_SRC="/tmp/awscli"
-WORKDIR $AWS_SRC
-RUN wget $AWS_URL \
-    && unzip $AWS_ARCHIVE \
-    && ./aws/install \
-    && rm -rf $AWS_SRC
+    && apt-get install -y --no-install-recommends $PG_DEPS \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install config files
 # --------------------

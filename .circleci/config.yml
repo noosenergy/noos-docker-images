@@ -81,9 +81,8 @@ workflows:
     jobs:
       - hold:
           type: approval
-          filters: &filter-master-only
-            branches:
-              only: master
+          filters:
+            <<: *filter-master-only
       - build-image-dbbackup:
           context: CIRCLECI_SHARED
           requires:

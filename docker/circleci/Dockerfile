@@ -8,7 +8,8 @@ ARG PIPENV_RELEASE="2020.11.4"
 ARG POETRY_RELEASE="1.1.4"
 ENV PIPENV_VENV_IN_PROJECT=true
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
-RUN pip install pipenv==$PIPENV_RELEASE poetry==$POETRY_RELEASE
+RUN pip install --upgrade pip \
+    && pip install pipenv==$PIPENV_RELEASE poetry==$POETRY_RELEASE
 
 # Install Noos CI/CD SDKs
 # -----------------------

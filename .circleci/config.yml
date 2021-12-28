@@ -36,14 +36,14 @@ jobs:
           image-name: dbbackup
           image-tag: ${CIRCLE_SHA1}
 
-  build-image-jupyterhub:
+  build-image-fluentd:
     executor: noos-ci/default
     steps:
       - checkout
       - noos-ci/docker-build-image:
           registry-provider: docker
-          image-context: ./docker/jupyterhub
-          image-name: jupyterhub
+          image-context: ./docker/fluentd
+          image-name: fluentd
           image-tag: ${CIRCLE_SHA1}
 
   build-image-jupyterlab:
@@ -90,13 +90,13 @@ workflows:
           filters:
             <<: *filter-master-only
 
-  build-image-jupyterhub:
+  build-image-fluentd:
     jobs:
       - hold:
           type: approval
           filters:
             <<: *filter-master-only
-      - build-image-jupyterhub:
+      - build-image-fluentd:
           context: CIRCLECI_SHARED
           requires:
             - hold

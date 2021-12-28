@@ -2,6 +2,19 @@ FROM cimg/python:3.8.6
 
 USER root
 
+# Install Node.js
+# ---------------
+ARG NODE_VERSION="v16.13.1"
+RUN curl -L -o node.tar.xz "https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.xz" \
+	&& tar -xJf node.tar.xz -C /usr/local --strip-components=1 \
+	&& rm node.tar.xz \
+	&& ln -s /usr/local/bin/node /usr/local/bin/nodejs
+
+# Install JavaScript package manager
+# ----------------------------------
+ARG YARN_VERSION="v1.22.17"
+RUN npm install --global yarn@${YARN_VERSION}
+
 # Install Python package managers
 # -------------------------------
 ARG PIPENV_RELEASE="2020.11.4"

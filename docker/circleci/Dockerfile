@@ -1,3 +1,4 @@
+# https://github.com/CircleCI-Public/cimg-python/blob/master/3.8/Dockerfile
 FROM cimg/python:3.8.6
 
 USER root
@@ -19,10 +20,11 @@ RUN npm install --global yarn@${YARN_VERSION}
 # -------------------------------
 ARG PIPENV_RELEASE="2020.11.4"
 ARG POETRY_RELEASE="1.1.12"
+ENV SYSTEM_VERSION_COMPAT=1
 ENV PIPENV_VENV_IN_PROJECT=true
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
-RUN pip install --upgrade pip \
-    && pip install pipenv==$PIPENV_RELEASE poetry==$POETRY_RELEASE
+RUN pip install --upgrade pip pipenv==$PIPENV_RELEASE \
+    && poetry self update $POETRY_RELEASE
 
 # Install Noos CI/CD SDKs
 # -----------------------

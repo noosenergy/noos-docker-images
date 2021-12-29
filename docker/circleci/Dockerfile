@@ -21,7 +21,8 @@ ARG POETRY_RELEASE="1.1.12"
 ENV PIPENV_VENV_IN_PROJECT=true
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 ENV POETRY_HOME=/home/circleci/.poetry
-RUN pip install pipenv==$PIPENV_RELEASE && \
+RUN pip install --upgrade pip && \
+    pip install pipenv==$PIPENV_RELEASE && \
     curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | \
     python - --uninstall && \
     curl -sSL "https://install.python-poetry.org" | \

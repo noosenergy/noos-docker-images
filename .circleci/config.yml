@@ -71,7 +71,7 @@ workflows:
             branches:
               only: master
       - build-image-circleci:
-          context: CIRCLECI_SHARED
+          context: DOCKERHUB_SHARED
           requires:
             - hold
           filters:
@@ -84,7 +84,7 @@ workflows:
           filters:
             <<: *filter-master-only
       - build-image-dbbackup:
-          context: CIRCLECI_SHARED
+          context: DOCKERHUB_SHARED
           requires:
             - hold
           filters:
@@ -97,7 +97,7 @@ workflows:
           filters:
             <<: *filter-master-only
       - build-image-fluentd:
-          context: CIRCLECI_SHARED
+          context: DOCKERHUB_SHARED
           requires:
             - hold
           filters:
@@ -110,7 +110,7 @@ workflows:
           filters:
             <<: *filter-master-only
       - build-image-jupyterlab:
-          context: CIRCLECI_SHARED
+          context: DOCKERHUB_SHARED
           requires:
             - hold
           filters:

@@ -3,6 +3,15 @@ FROM cimg/python:3.8.6
 
 USER root
 
+# # Provision Selenium (Firefox)
+# # ----------------------------
+ARG FIREFOX_VERSION="v0.30.0"
+RUN apt-get update && \
+    apt-get install -y firefox && \
+    apt-get clean && \
+    curl -sSL "https://github.com/mozilla/geckodriver/releases/download/${FIREFOX_VERSION}/geckodriver-${FIREFOX_VERSION}-linux64.tar.gz" | \
+    tar -xz -C /usr/local/bin
+
 # Install Node.js
 # ---------------
 ARG NODE_VERSION="v16.13.1"

@@ -6,7 +6,6 @@ Set of developer tools for working locally on the Neptune platform and build opt
 
 * a [CircleCI image](./docker/circleci) for running CI/CD pipelines
 * a [Backup service](./docker/dbbackup) for persisting databases into local / remote storage
-* a [Fluentd service](./docker/fluentd) for launching a k8s pre-configured Fluentd daemonset
 * a [JupyterLab service](./docker/jupyterlab) for launching a k8s pre-configured Jupyter notebook server
 
 ## Quickstart

@@ -36,16 +36,6 @@ jobs:
           image-name: dbbackup
           image-tag: ${CIRCLE_SHA1}
 
-  build-image-fluentd:
-    executor: noos-ci/default
-    steps:
-      - checkout
-      - noos-ci/docker-build-image:
-          registry-provider: docker
-          image-context: ./docker/fluentd
-          image-name: fluentd
-          image-tag: ${CIRCLE_SHA1}
-
   build-image-jupyterlab:
     executor: noos-ci/default
     steps:
@@ -54,6 +44,16 @@ jobs:
           registry-provider: docker
           image-context: ./docker/jupyterlab
           image-name: jupyterlab
+          image-tag: ${CIRCLE_SHA1}
+
+  build-image-jupyterlab-dash:
+    executor: noos-ci/default
+    steps:
+      - checkout
+      - noos-ci/docker-build-image:
+          registry-provider: docker
+          image-context: ./docker/jupyterlab-dash
+          image-name: jupyterlab-dash
           image-tag: ${CIRCLE_SHA1}
 
 
@@ -90,19 +90,6 @@ workflows:
           filters:
             <<: *filter-master-only
 
-  build-image-fluentd:
-    jobs:
-      - hold:
-          type: approval
-          filters:
-            <<: *filter-master-only
-      - build-image-fluentd:
-          context: DOCKERHUB_SHARED
-          requires:
-            - hold
-          filters:
-            <<: *filter-master-only
-
   build-image-jupyterlab:
     jobs:
       - hold:
@@ -110,6 +97,19 @@ workflows:
           filters:
             <<: *filter-master-only
       - build-image-jupyterlab:
+          context: DOCKERHUB_SHARED
+          requires:
+            - hold
+          filters:
+            <<: *filter-master-only
+
+  build-image-jupyterlab-dash:
+    jobs:
+      - hold:
+          type: approval
+          filters:
+            <<: *filter-master-only
+      - build-image-jupyterlab-dash:
           context: DOCKERHUB_SHARED
           requires:
             - hold

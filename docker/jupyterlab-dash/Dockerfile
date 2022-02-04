@@ -1,6 +1,6 @@
 # https://github.com/jupyter/docker-stacks
 # https://hub.docker.com/u/jupyter/
-FROM jupyter/base-notebook:python-3.8.6
+FROM jupyter/base-notebook:python-3.8.8
 
 USER root
 
@@ -15,8 +15,8 @@ RUN apt-get update && \
 # Install Conda packages
 # ----------------------
 COPY environment.yml /tmp/
-RUN conda env update -q -f /tmp/environment.yml && \
-    conda clean --all -f -y
+RUN mamba env update -q -f /tmp/environment.yml && \
+    mamba clean --all -f -y
 
 # Configure Lab extensions
 # ------------------------
@@ -25,13 +25,12 @@ COPY lab/. ${CONDA_DIR}/share/jupyter/lab/settings
 
 # Configure nbconvert
 # -------------------
-COPY nbconvert/. /home/$NB_USER/.jupyter
+COPY nbconvert/. ${HOME}/.jupyter
 
 # Cleanup
 # -------
 RUN rm -rf /tmp/* && \
     rm -rf ${HOME}/.cache ${HOME}/.npm ${HOME}/.yarn && \
-    find ${CONDA_DIR} -follow -type f -name '*.a' -delete && \
     find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
     find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete && \
     fix-permissions $CONDA_DIR

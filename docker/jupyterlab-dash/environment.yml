@@ -4,17 +4,20 @@ channels:
 dependencies:
   # metapackages
   - nomkl
-  # main packages
+  # notebooks
   - jupyterlab>=3
-  - ipywidgets>=7.6
   # https://github.com/pallets/jinja/issues/1585
-  - markupsafe==2.1.0
-  # kernel packages
+  - markupsafe>=2.1.0
+  # https://github.com/jupyterlab/jupyterlab/issues/10228
+  - nbclassic>=0.2.8
+  # debugging
   - xeus-python
-  # plotting packages
-  - plotly
+  # plotting
   - matplotlib
-  # extension packages
+  - plotly
+  - ipywidgets>=7.6
   - jupyter-dash
-  - jupyterlab-git
+  - dash<2.0.0
+  # extensions
   - jupyter-server-proxy
+  - jupyterlab-git

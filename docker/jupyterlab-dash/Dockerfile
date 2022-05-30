@@ -42,3 +42,6 @@ RUN jupyter lab clean && \
     jupyter lab build --dev-build=False --name='Neptune'
 
 USER $NB_UID
+
+# Expose Dash port
+EXPOSE 8051

@@ -4,11 +4,15 @@ channels:
 dependencies:
   # metapackages
   - nomkl
-  # packages
+  # main packages
   - jupyterlab>=3
   - ipywidgets>=7.6
+  # kernel packages
   - xeus-python
+  # plotting packages
   - plotly
   - matplotlib
+  # extension packages
   - jupyter-dash
   - jupyterlab-git
+  - jupyter-server-proxy

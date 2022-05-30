@@ -20,8 +20,9 @@ RUN mamba env update -q -f /tmp/environment.yml && \
 
 # Configure Lab extensions
 # ------------------------
-# https://jupyterlab.readthedocs.io/en/stable/user/extensions.html#settings
-COPY lab/. ${CONDA_DIR}/share/jupyter/lab/settings
+# https://jupyterlab.readthedocs.io/en/stable/user/directories.html
+COPY lab/config/. ${CONDA_DIR}/etc/jupyter/labconfig
+COPY lab/data/. ${CONDA_DIR}/share/jupyter/lab/settings
 
 # Configure nbconvert
 # -------------------

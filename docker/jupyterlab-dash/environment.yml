@@ -17,6 +17,8 @@ dependencies:
   - plotly
   - ipywidgets>=7.6
   - jupyter-dash
+  - ipykernel>=6
+  # https://github.com/plotly/jupyter-dash/issues/75
   - dash<2.0.0
   # extensions
   - jupyter-server-proxy

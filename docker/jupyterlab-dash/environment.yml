@@ -23,3 +23,4 @@ dependencies:
   # extensions
   - jupyter-server-proxy
   - jupyterlab-git
+  - jupyterlab-code-snippets

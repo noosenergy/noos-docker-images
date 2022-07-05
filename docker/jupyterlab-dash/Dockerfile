@@ -31,7 +31,7 @@ COPY nbconvert/. ${HOME}/.jupyter
 # Cleanup
 # -------
 RUN rm -rf /tmp/* && \
-    rm -rf ${HOME}/.cache ${HOME}/.npm ${HOME}/.yarn && \
+    rm -rf ${HOME}/work ${HOME}/.cache ${HOME}/.npm ${HOME}/.yarn && \
     find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
     find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete && \
     fix-permissions $CONDA_DIR
@@ -43,6 +43,3 @@ RUN jupyter lab clean && \
     jupyter lab build --dev-build=False --name='Neptune'
 
 USER $NB_UID
-
-# Expose Dash port
-EXPOSE 8051

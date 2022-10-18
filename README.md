@@ -2,7 +2,7 @@
 
 # Noos Forge
 
-Set of developer tools for working locally on the Neptune platform and build optimized [Docker base images](https://hub.docker.com/u/noosenergy):
+Set of developer tools for working locally on the Noos platform and build optimized [Docker base images](https://hub.docker.com/u/noosenergy):
 
 * a [CircleCI image](./docker/circleci) for running CI/CD pipelines
 * a [Backup service](./docker/dbbackup) for persisting databases into local / remote storage

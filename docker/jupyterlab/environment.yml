@@ -2,16 +2,25 @@ name: base
 channels:
   - conda-forge
 dependencies:
+  # metapackages
   - nomkl
-  - xeus-python
-  - matplotlib
-  - plotly
-  - voila
-  - ipywidgets
-  - bqplot
-  - cfgrib
-  - jupyterlab-git
-  - dask-labextension
-  # TODO: follow issue
+  # notebooks
+  - jupyterlab>=3
+  # https://github.com/pallets/jinja/issues/1585
+  - markupsafe>=2.1.0
   # https://github.com/jupyterlab/jupyterlab/issues/10228
   - nbclassic>=0.2.8
+  # debugging
+  - xeus-python
+  # plotting
+  - matplotlib
+  - plotly
+  - ipywidgets>=7.6
+  - jupyter-dash
+  - ipykernel>=6
+  # https://github.com/plotly/jupyter-dash/issues/75
+  - dash<2.0.0
+  # extensions
+  - jupyter-server-proxy
+  - jupyterlab-git
+  - jupyterlab-code-snippets

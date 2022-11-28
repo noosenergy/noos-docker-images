@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/noosenergy/noos-forge.svg?style=svg&circle-token=6ed140ddf30bafe312339a5d3adaec60106d0710)](https://circleci.com/gh/noosenergy/noos-forge)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/noosenergy/noos-forge/tree/master.svg?style=svg&circle-token=a480c2ff3df7de67f3d66b895562b69702685a01)](https://dl.circleci.com/status-badge/redirect/gh/noosenergy/noos-forge/tree/master)
 
 # Noos Forge
 

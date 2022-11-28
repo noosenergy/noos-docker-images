@@ -1,6 +1,22 @@
 ---
 version: 2.1
 
+default:
+  filter: &filter-master-only
+    branches:
+      only: master
+  hold: &hold-master-only
+    type: approval
+    filters:
+      <<: *filter-master-only
+  build: &deploy-master-only
+    context: DOCKERHUB_SHARED
+    requires:
+      - hold
+    filters:
+      <<: *filter-master-only
+
+
 # ----------------
 # Orbs declaration
 # ----------------
@@ -56,39 +72,20 @@ workflows:
   build-image-circleci:
     jobs:
       - hold:
-          type: approval
-          filters: &filter-master-only
-            branches:
-              only: master
+          <<: *hold-master-only
       - build-image-circleci:
-          context: DOCKERHUB_SHARED
-          requires:
-            - hold
-          filters:
-            <<: *filter-master-only
+          <<: *deploy-master-only
 
   build-image-dbbackup:
     jobs:
       - hold:
-          type: approval
-          filters:
-            <<: *filter-master-only
+          <<: *hold-master-only
       - build-image-dbbackup:
-          context: DOCKERHUB_SHARED
-          requires:
-            - hold
-          filters:
-            <<: *filter-master-only
+          <<: *deploy-master-only
 
   build-image-jupyterlab:
     jobs:
       - hold:
-          type: approval
-          filters:
-            <<: *filter-master-only
+          <<: *hold-master-only
       - build-image-jupyterlab:
-          context: DOCKERHUB_SHARED
-          requires:
-            - hold
-          filters:
-            <<: *filter-master-only
+          <<: *deploy-master-only

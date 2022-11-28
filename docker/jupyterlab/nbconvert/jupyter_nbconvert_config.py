@@ -6,7 +6,6 @@
 
 c = get_config()
 
-
 #------------------------------------------------------------------------------
 # SlidesExporter(HTMLExporter) configuration
 #------------------------------------------------------------------------------
@@ -31,4 +30,3 @@ c.SlidesExporter.exclude_unknown = True
 ## If True, enable scrolling within each slide
 #  Default: False
 c.SlidesExporter.reveal_scroll = True
-

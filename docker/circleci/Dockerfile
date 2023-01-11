@@ -32,7 +32,7 @@ ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 ENV POETRY_HOME=/home/circleci/.poetry
 RUN pip install --upgrade pip && \
     pip install pipenv==$PIPENV_RELEASE && \
-    curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | \
+    curl -sSL "https://install.python-poetry.org" | \
     python - --uninstall && \
     curl -sSL "https://install.python-poetry.org" | \
     python - --version=$POETRY_RELEASE

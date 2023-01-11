@@ -13,5 +13,8 @@
   "@jupyterlab/git:plugin": {
     "simpleStaging": false,
     "cancelPullMergeConflict": true
+  },
+  "@jupyterlab/docmanager-extension:plugin": {
+    "autosave": false,
   }
 }

@@ -24,3 +24,4 @@ dependencies:
   - jupyter-server-proxy
   - jupyterlab-git
   - jupyterlab-code-snippets
+  - jupyterlab-tabular-data-editor

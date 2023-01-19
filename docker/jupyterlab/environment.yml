@@ -5,12 +5,9 @@ dependencies:
   # metapackages
   - nomkl
   # z2jh setup
+  - notebook>=6.0.0
   - jupyterlab>=3.0.0
   - jupyterhub>=3.0.0
-  # https://github.com/pallets/jinja/issues/1585
-  - markupsafe>=2.1.0
-  # https://github.com/jupyterlab/jupyterlab/issues/10228
-  - nbclassic>=0.2.8
   # debugging
   - xeus-python
   # plotting

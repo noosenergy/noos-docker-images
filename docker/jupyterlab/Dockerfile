@@ -40,6 +40,6 @@ RUN rm -rf /tmp/* && \
 # --------------------
 ARG NODE_OPTIONS=--max-old-space-size=4096
 RUN jupyter lab clean && \
-    jupyter lab build --dev-build=False --name='Neptune'
+    jupyter lab build --dev-build=False --name='Noos'
 
 USER $NB_UID

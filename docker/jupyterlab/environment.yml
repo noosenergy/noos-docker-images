@@ -4,8 +4,9 @@ channels:
 dependencies:
   # metapackages
   - nomkl
-  # notebooks
-  - jupyterlab>=3
+  # z2jh setup
+  - jupyterlab>=3.0.0
+  - jupyterhub>=3.0.0
   # https://github.com/pallets/jinja/issues/1585
   - markupsafe>=2.1.0
   # https://github.com/jupyterlab/jupyterlab/issues/10228
@@ -15,12 +16,12 @@ dependencies:
   # plotting
   - matplotlib
   - plotly
-  - ipywidgets>=7.6
-  - jupyter-dash
-  - ipykernel>=6
   # https://github.com/plotly/jupyter-dash/issues/75
   - dash<2.0.0
+  - ipywidgets>=7.6
+  - ipykernel>=6
   # extensions
+  - jupyter-dash
   - jupyter-server-proxy
   - jupyterlab-git
   - jupyterlab-code-snippets

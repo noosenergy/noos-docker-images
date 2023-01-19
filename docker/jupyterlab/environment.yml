@@ -7,7 +7,7 @@ dependencies:
   # z2jh setup
   - notebook>=6.0.0
   - jupyterlab>=3.0.0
-  - jupyterhub>=3.0.0
+  - jupyterhub==3.0.0
   # debugging
   - xeus-python
   # plotting

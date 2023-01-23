@@ -1,4 +1,9 @@
 {
+  "@jupyterlab/notebook-extension:tracker": {
+    "codeCellConfig": {
+      "autoClosingBrackets": true
+      }
+  },
   "@jupyterlab/filebrowser-extension:browser": {
     "navigateToCurrentDirectory": true
   },

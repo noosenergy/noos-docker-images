@@ -62,6 +62,16 @@ jobs:
           image-name: jupyterlab
           image-tag: ${CIRCLE_SHA1}
 
+  build-image-pyscript:
+    executor: noos-ci/default
+    steps:
+      - checkout
+      - noos-ci/docker-build-image:
+          registry-provider: docker
+          image-context: ./docker/pyscript
+          image-name: pyscript
+          image-tag: ${CIRCLE_SHA1}
+
 
 # -----------------
 # Pipeline workflow
@@ -88,4 +98,11 @@ workflows:
       - hold:
           <<: *hold-master-only
       - build-image-jupyterlab:
+          <<: *deploy-master-only
+
+  build-image-pyscript:
+    jobs:
+      - hold:
+          <<: *hold-master-only
+      - build-image-pyscript:
           <<: *deploy-master-only

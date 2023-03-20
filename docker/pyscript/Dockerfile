@@ -5,7 +5,7 @@ USER root
 # Install Fluentd client
 # ----------------------
 # https://docs.fluentd.org/language-bindings/python
-RUN pip install --no-cache fluent-logger
+RUN pip install --no-cache holidays fluent-logger
 
 # Set unprivileged user
 # ---------------------

@@ -1,6 +1,6 @@
 # https://github.com/jupyter/docker-stacks
 # https://hub.docker.com/u/jupyter/
-FROM jupyter/base-notebook:python-3.8.8
+FROM jupyter/base-notebook:python-3.8
 
 USER root
 
@@ -38,8 +38,7 @@ RUN rm -rf /tmp/* && \
 
 # Build Lab extensions
 # --------------------
-ARG NODE_OPTIONS=--max-old-space-size=4096
 RUN jupyter lab clean && \
-    jupyter lab build --dev-build=False --name='Noos'
+    jupyter lab build --dev-build=False
 
 USER $NB_UID

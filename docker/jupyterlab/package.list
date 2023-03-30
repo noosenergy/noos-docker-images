@@ -1,20 +1,12 @@
 # --- Jupyter dependencies ---
 build-essential
-git
-inkscape
-jed
-libsm6
-libxext-dev
-libxrender1
-lmodern
-netcat
-pandoc
-python-dev
+python3-dev
 # --- nbconvert dependencies ---
 texlive-xetex
 texlive-fonts-recommended
 texlive-plain-generic
+# --- common utilities ---
+git
 tzdata
 unzip
-# --- JSON document parser ---
 jq

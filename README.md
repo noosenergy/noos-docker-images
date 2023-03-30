@@ -1,6 +1,6 @@
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/noosenergy/noos-forge/tree/master.svg?style=svg&circle-token=0137e0b415488ec2150fd2c329d2a350c8bcc0f1)](https://dl.circleci.com/status-badge/redirect/gh/noosenergy/noos-forge/tree/master)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/noosenergy/noos-docker-images/tree/master.svg?style=svg&circle-token=0137e0b415488ec2150fd2c329d2a350c8bcc0f1)](https://dl.circleci.com/status-badge/redirect/gh/noosenergy/noos-docker-images/tree/master)
 
-# Noos Forge
+# Noos Docker Images
 
 Set of developer tools for working locally on the Noos platform and build optimized [Docker base images](https://hub.docker.com/u/noosenergy):
 

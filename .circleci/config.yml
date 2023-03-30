@@ -9,12 +9,19 @@ default:
     type: approval
     filters:
       <<: *filter-master-only
-  build: &deploy-master-only
+  build: &build-master-only
     context: DOCKERHUB_SHARED
-    requires:
-      - hold
     filters:
       <<: *filter-master-only
+  manual-build: &manual-build-master-only
+    requires:
+      - hold
+    <<: *build-master-only
+
+parameters:
+  montly_trigger:
+    type: boolean
+    default: false
 
 
 # ----------------
@@ -79,30 +86,42 @@ jobs:
 
 workflows:
 
+  monthly-build-images:
+    when: << pipeline.parameters.montly_trigger >>
+    jobs:
+      - build-image-circleci:
+          <<: *build-master-only
+      - build-image-dbbackup:
+          <<: *build-master-only
+      - build-image-jupyterlab:
+          <<: *build-master-only
+      - build-image-pyscript:
+          <<: *build-master-only
+
   build-image-circleci:
     jobs:
       - hold:
           <<: *hold-master-only
       - build-image-circleci:
-          <<: *deploy-master-only
+          <<: *manual-build-master-only
 
   build-image-dbbackup:
     jobs:
       - hold:
           <<: *hold-master-only
       - build-image-dbbackup:
-          <<: *deploy-master-only
+          <<: *manual-build-master-only
 
   build-image-jupyterlab:
     jobs:
       - hold:
           <<: *hold-master-only
       - build-image-jupyterlab:
-          <<: *deploy-master-only
+          <<: *manual-build-master-only
 
   build-image-pyscript:
     jobs:
       - hold:
           <<: *hold-master-only
       - build-image-pyscript:
-          <<: *deploy-master-only
+          <<: *manual-build-master-only

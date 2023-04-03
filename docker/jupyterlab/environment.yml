@@ -21,6 +21,8 @@ dependencies:
   - jupyter-server-proxy
   - jupyterlab-git
   - jupyterlab-code-snippets
+  # updating cryptography
+  - pyopenssl
   # extras
   - pip
   - pip:

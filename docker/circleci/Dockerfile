@@ -1,5 +1,5 @@
 # https://github.com/CircleCI-Public/cimg-python/blob/master/3.8/Dockerfile
-FROM cimg/python:3.8.6
+FROM cimg/python:3.8
 
 USER root
 
@@ -32,8 +32,6 @@ ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 ENV POETRY_HOME=/home/circleci/.poetry
 RUN pip install --upgrade pip && \
     pip install pipenv==$PIPENV_RELEASE && \
-    curl -sSL "https://install.python-poetry.org" | \
-    python - --uninstall && \
     curl -sSL "https://install.python-poetry.org" | \
     python - --version=$POETRY_RELEASE
 

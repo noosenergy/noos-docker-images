@@ -9,7 +9,7 @@ RUN pip install --no-cache holidays fluent-logger
 
 # Set unprivileged user
 # ---------------------
-ARG APP_USER="neptune"
+ARG APP_USER="noos"
 RUN useradd -m -U $APP_USER
 USER $APP_USER
 WORKDIR /home/${APP_USER}

@@ -1,5 +1,7 @@
-# https://github.com/CircleCI-Public/cimg-python/blob/master/3.8/Dockerfile
-FROM cimg/python:3.8
+# https://circleci.com/developer/images/image/cimg/python
+# https://github.com/CircleCI-Public/cimg-python
+# https://hub.docker.com/r/cimg/python
+FROM cimg/python:3.8.17
 
 USER root
 

@@ -51,7 +51,7 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Set unprivileged user
 # ---------------------
-ARG APP_USER="neptune"
+ARG APP_USER="noos"
 RUN useradd -m -U $APP_USER
 USER $APP_USER
 WORKDIR /home/${APP_USER}

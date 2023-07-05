@@ -1,6 +1,6 @@
 # https://github.com/jupyter/docker-stacks
 # https://hub.docker.com/u/jupyter/
-FROM jupyter/base-notebook:python-3.8
+FROM jupyter/base-notebook:python-3.8.13
 
 USER root
 

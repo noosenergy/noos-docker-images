@@ -1,7 +1,7 @@
 # https://circleci.com/developer/images/image/cimg/python
 # https://github.com/CircleCI-Public/cimg-python
 # https://hub.docker.com/r/cimg/python
-FROM cimg/python:3.8.17
+FROM cimg/python:3.11.4
 
 USER root
 
@@ -39,8 +39,8 @@ RUN pip install --upgrade pip && \
 
 # Install Noos CI/CD SDKs
 # -----------------------
-ARG NOOSINV_VERSION="0.0.11"
-ARG NOOSTF_VERSION="0.0.6"
+ARG NOOSINV_VERSION="0.0.12"
+ARG NOOSTF_VERSION="0.0.7"
 RUN pip install noos-inv==$NOOSINV_VERSION noos-tf==$NOOSTF_VERSION
 
 WORKDIR /home/circleci/project

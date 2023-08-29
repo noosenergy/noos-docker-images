@@ -1,127 +1,121 @@
 ---
 version: 2.1
 
-default:
-  filter: &filter-master-only
-    branches:
-      only: master
-  hold: &hold-master-only
-    type: approval
-    filters:
-      <<: *filter-master-only
-  build: &build-master-only
-    context: DOCKERHUB_SHARED
-    filters:
-      <<: *filter-master-only
-  manual-build: &manual-build-master-only
-    requires:
-      - hold
-    <<: *build-master-only
-
 parameters:
   montly_trigger:
     type: boolean
     default: false
 
+filters:
+  filter: &filter_master_only
+    branches:
+      only: master
+  hold: &hold_master_only
+    type: approval
+    filters:
+      <<: *filter_master_only
+  build: &build_master_only
+    context: DOCKERHUB_SHARED
+    filters:
+      <<: *filter_master_only
+  manual_build: &manual_build_master_only
+    requires:
+      - hold
+    <<: *build_master_only
 
 # ----------------
 # Orbs declaration
 # ----------------
 
 orbs:
+  noos-ci: noosenergy/noos-ci@0.1.16
 
-  noos-ci: noosenergy/noos-ci@0.1.15
-
-
-# --------------
-# Pipeline tasks
-# --------------
+# -------------
+# Pipeline jobs
+# -------------
 
 jobs:
-
-  build-image-circleci:
+  build_image_circleci:
     executor: noos-ci/default
     steps:
       - checkout
-      - noos-ci/docker-build-image:
-          registry-provider: docker
-          image-context: ./docker/circleci
-          image-name: circleci
-          image-tag: ${CIRCLE_SHA1}
+      - noos-ci/docker_build_image:
+          registry_provider: docker
+          image_context: ./docker/circleci
+          image_name: circleci
+          image_tag: ${CIRCLE_SHA1}
 
-  build-image-dbbackup:
+  build_image_dbbackup:
     executor: noos-ci/default
     steps:
       - checkout
-      - noos-ci/docker-build-image:
-          registry-provider: docker
-          image-context: ./docker/dbbackup
-          image-name: dbbackup
-          image-tag: ${CIRCLE_SHA1}
+      - noos-ci/docker_build_image:
+          registry_provider: docker
+          image_context: ./docker/dbbackup
+          image_name: dbbackup
+          image_tag: ${CIRCLE_SHA1}
 
-  build-image-jupyterlab:
+  build_image_jupyterlab:
     executor: noos-ci/default
     steps:
       - checkout
-      - noos-ci/docker-build-image:
-          registry-provider: docker
-          image-context: ./docker/jupyterlab
-          image-name: jupyterlab
-          image-tag: ${CIRCLE_SHA1}
+      - noos-ci/docker_build_image:
+          registry_provider: docker
+          image_context: ./docker/jupyterlab
+          image_name: jupyterlab
+          image_tag: ${CIRCLE_SHA1}
 
-  build-image-pyscript:
+  build_image_pyscript:
     executor: noos-ci/default
     steps:
       - checkout
-      - noos-ci/docker-build-image:
-          registry-provider: docker
-          image-context: ./docker/pyscript
-          image-name: pyscript
-          image-tag: ${CIRCLE_SHA1}
+      - noos-ci/docker_build_image:
+          registry_provider: docker
+          image_context: ./docker/pyscript
+          image_name: pyscript
+          image_tag: ${CIRCLE_SHA1}
 
-
-# -----------------
-# Pipeline workflow
-# -----------------
+# ------------------
+# Pipeline workflows
+# ------------------
 
 workflows:
-
-  monthly-build-images:
+  monthly_build_images:
     when: << pipeline.parameters.montly_trigger >>
     jobs:
-      - build-image-circleci:
-          <<: *build-master-only
-      - build-image-dbbackup:
-          <<: *build-master-only
-      - build-image-jupyterlab:
-          <<: *build-master-only
-      - build-image-pyscript:
-          <<: *build-master-only
+      - build_image_circleci:
+          <<: *build_master_only
+      - build_image_dbbackup:
+          <<: *build_master_only
+      - build_image_jupyterlab:
+          <<: *build_master_only
+      - build_image_pyscript:
+          <<: *build_master_only
 
-  build-image-circleci:
+  build_image_circleci:
     jobs:
       - hold:
-          <<: *hold-master-only
-      - build-image-circleci:
-          <<: *manual-build-master-only
+          <<: *hold_master_only
+      - build_image_circleci:
+          <<: *manual_build_master_only
 
-  build-image-dbbackup:
+  build_image_dbbackup:
     jobs:
       - hold:
-          <<: *hold-master-only
-      - build-image-dbbackup:
-          <<: *manual-build-master-only
+          <<: *hold_master_only
+      - build_image_dbbackup:
+          <<: *manual_build_master_only
 
-  build-image-jupyterlab:
+  build_image_jupyterlab:
     jobs:
       - hold:
-          <<: *hold-master-only
-      - build-image-jupyterlab:
-          <<: *manual-build-master-only
+          <<: *hold_master_only
+      - build_image_jupyterlab:
+          <<: *manual_build_master_only
 
-  build-image-pyscript:
+  build_image_pyscript:
     jobs:
       - hold:
-          <<: *hold-master-only
-      - build-image-pyscript:
-          <<: *manual-build-master-only
+          <<: *hold_master_only
+      - build_image_pyscript:
+          <<: *manual_build_master_only

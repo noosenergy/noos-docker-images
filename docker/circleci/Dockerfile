@@ -6,13 +6,16 @@ FROM cimg/python:3.8.17
 USER root
 
 # # Provision Selenium (Firefox)
+# # Change package source to install Firefox .deb instead of snap, as snap is now the default 
+# # Install geckodriver
 # # ----------------------------
-ARG FIREFOX_VERSION="v0.30.0"
+ARG GECKODRIVER_VERSION="v0.33.0"
+COPY mozilla-firefox /etc/apt/preferences.d/
 RUN apt-get update && \
-    apt-get install -y firefox && \
-    apt-get clean && \
-    curl -sSL "https://github.com/mozilla/geckodriver/releases/download/${FIREFOX_VERSION}/geckodriver-${FIREFOX_VERSION}-linux64.tar.gz" | \
-    tar -xz -C /usr/local/bin
+    add-apt-repository ppa:mozillateam/ppa -y && \
+    apt install firefox && \
+    curl -sSL "https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz" | \
+    tar -xzv -C /usr/local/bin
 
 # Install Node.js
 # ---------------

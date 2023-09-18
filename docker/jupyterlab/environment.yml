@@ -11,9 +11,9 @@ dependencies:
   # debugging
   - xeus-python
   # plotting
+  - matplotlib
   - plotly
-  # https://github.com/plotly/jupyter-dash/issues/75
-  - dash<2.0.0
+  - dash>=2,<2.10
   - ipywidgets>=7.6
   - ipykernel>=6
   # extensions

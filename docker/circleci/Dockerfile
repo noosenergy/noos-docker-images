@@ -1,14 +1,14 @@
 # https://circleci.com/developer/images/image/cimg/python
 # https://github.com/CircleCI-Public/cimg-python
 # https://hub.docker.com/r/cimg/python
-FROM cimg/python:3.8.17
+FROM cimg/python:3.11.4
 
 USER root
 
-# # Provision Selenium (Firefox)
-# # Change package source to install Firefox .deb instead of snap, as snap is now the default 
-# # Install geckodriver
-# # ----------------------------
+# Provision Selenium (Firefox)
+# Change package source to install Firefox .deb instead of snap, as snap is now the default
+# Install geckodriver
+# ----------------------------
 ARG GECKODRIVER_VERSION="v0.33.0"
 COPY mozilla-firefox /etc/apt/preferences.d/
 RUN apt-get update && \
@@ -30,7 +30,7 @@ RUN npm install --global yarn@${YARN_VERSION}
 
 # Install Python package managers
 # -------------------------------
-ARG PIPENV_RELEASE="2022.1.8"
+ARG PIPENV_RELEASE="2023.6.2"
 ARG POETRY_RELEASE="1.5.1"
 ENV PIPENV_VENV_IN_PROJECT=true
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
@@ -42,8 +42,8 @@ RUN pip install --upgrade pip && \
 
 # Install Noos CI/CD SDKs
 # -----------------------
-ARG NOOSINV_VERSION="0.0.11"
-ARG NOOSTF_VERSION="0.0.6"
+ARG NOOSINV_VERSION="0.0.13"
+ARG NOOSTF_VERSION="0.0.8"
 RUN pip install noos-inv==$NOOSINV_VERSION noos-tf==$NOOSTF_VERSION
 
 WORKDIR /home/circleci/project

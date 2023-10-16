@@ -19,13 +19,13 @@ RUN apt-get update && \
 
 # Install Node.js
 # ---------------
-ARG NODE_VERSION="v16.13.1"
+ARG NODE_VERSION="v18.18.0"
 RUN curl -sSL "https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.xz" | \
 	tar -xJ -C /usr/local --strip-components=1
 
 # Install JavaScript package manager
 # ----------------------------------
-ARG YARN_VERSION="v1.22.17"
+ARG YARN_VERSION="v1.22.19"
 RUN npm install --global yarn@${YARN_VERSION}
 
 # Install Python package managers

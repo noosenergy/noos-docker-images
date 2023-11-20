@@ -59,7 +59,7 @@ jobs:
     executor: noos-ci/default
     steps:
       - checkout
-      - noos-ci/docker_build_image:
+      - noos-ci/docker_buildx_image:
           registry_provider: docker
           image_context: ./docker/jupyterlab
           image_name: jupyterlab

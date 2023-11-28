@@ -42,7 +42,7 @@ RUN pip install --upgrade pip && \
 
 # Install Noos CI/CD SDKs
 # -----------------------
-ARG NOOSINV_VERSION="0.0.15"
+ARG NOOSINV_VERSION="0.0.17"
 ARG NOOSTF_VERSION="0.0.8"
 RUN pip install noos-inv==$NOOSINV_VERSION noos-tf==$NOOSTF_VERSION
 

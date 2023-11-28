@@ -39,7 +39,7 @@ jobs:
     executor: noos-ci/default
     steps:
       - checkout
-      - noos-ci/docker_buildx_image:
+      - noos-ci/docker_build_image:
           registry_provider: docker
           image_context: ./docker/circleci
           image_name: circleci

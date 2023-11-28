@@ -1,7 +1,7 @@
 # https://circleci.com/developer/images/image/cimg/python
 # https://github.com/CircleCI-Public/cimg-python
 # https://hub.docker.com/r/cimg/python
-FROM cimg/python:3.11.4
+FROM cimg/python:3.11.5
 
 USER root
 

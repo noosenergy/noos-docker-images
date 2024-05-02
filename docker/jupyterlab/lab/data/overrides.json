@@ -16,6 +16,10 @@
   "@jupyterlab/apputils-extension:themes": {
     "theme": "JupyterLab Light"
   },
+  "@jupyterlab/apputils-extension:notification": {
+    "doNotDisturbMode": "true",
+    "fetchNews": "false"
+  },
   "@jupyterlab/git:plugin": {
     "simpleStaging": false,
     "cancelPullMergeConflict": true

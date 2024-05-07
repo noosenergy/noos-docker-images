@@ -24,9 +24,9 @@ RUN mamba env update -q -f /tmp/environment.yml && \
 COPY lab/config/. ${CONDA_DIR}/etc/jupyter/labconfig
 COPY lab/data/. ${CONDA_DIR}/share/jupyter/lab/settings
 
-# Configure nbconvert
-# -------------------
-COPY nbconvert/. ${HOME}/.jupyter
+# Configure Jupyterlab extensions (nbconvert & jupyterlab-templates)
+# ------------------------------------------------------------------
+COPY config_extensions/. ${HOME}/.jupyter
 
 # Cleanup
 # -------

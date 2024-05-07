@@ -28,7 +28,7 @@ filters:
 # ----------------
 
 orbs:
-  noos-ci: noosenergy/noos-ci@0.2.1
+  noos-ci: noosenergy/noos-ci@0.2.3
 
 # -------------
 # Pipeline jobs

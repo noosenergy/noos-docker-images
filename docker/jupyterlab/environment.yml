@@ -21,9 +21,10 @@ dependencies:
   - jupyter-server-proxy
   - jupyterlab-git
   - jupyterlab-code-snippets
+  - jupyterlab_templates<0.5 # jupyterlab>4 needed for 0.5+
   # updating cryptography
   - pyopenssl
   # extras
   - pip
   - pip:
-    - jupyterlab-spreadsheet-editor
+    - jupyterlab-spreadsheet-editor<0.7 # jupyterlab>4 needed for 0.7+

@@ -1,10 +1,11 @@
-#------------------------------------------------------------------------------
-# Jupyter-templates configuration
-#------------------------------------------------------------------------------
 # more info:
 # https://github.com/finos/jupyterlab_templates
 
 c = get_config()
+
+#------------------------------------------------------------------------------
+# Jupyter-templates configuration
+#------------------------------------------------------------------------------
 
 # Directory to save templates files
 c.JupyterLabTemplates.template_dirs = \

@@ -4,6 +4,8 @@ channels:
 dependencies:
   # metapackages
   - nomkl
+  # enforcing numpy 1.*
+  - numpy<2.0
   # z2jh setup
   - notebook>=6.0.0
   - jupyterlab>=3.0.0

@@ -41,4 +41,7 @@ RUN rm -rf /tmp/* && \
 RUN jupyter lab clean && \
     jupyter lab build --dev-build=False
 
+# Workaround for NOOS-874
+RUN conda install backports
+
 USER $NB_UID

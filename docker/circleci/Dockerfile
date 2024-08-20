@@ -1,3 +1,6 @@
+# ARG UV_RELEASE=0.3.0
+# FROM ghcr.io/astral-sh/uv:$UV_RELEASE AS stageforcopy
+
 # https://circleci.com/developer/images/image/cimg/python
 # https://github.com/CircleCI-Public/cimg-python
 # https://hub.docker.com/r/cimg/python
@@ -21,7 +24,7 @@ RUN apt-get update && \
 # ---------------
 ARG NODE_VERSION="v18.18.0"
 RUN curl -sSL "https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.xz" | \
-	tar -xJ -C /usr/local --strip-components=1
+    tar -xJ -C /usr/local --strip-components=1
 
 # Install JavaScript package manager
 # ----------------------------------
@@ -32,13 +35,17 @@ RUN npm install --global yarn@${YARN_VERSION}
 # -------------------------------
 ARG PIPENV_RELEASE="2023.6.2"
 ARG POETRY_RELEASE="1.5.1"
-ENV PIPENV_VENV_IN_PROJECT=true
+ARG UV_RELEASE="0.3.0"
+ENV PIPENV_VENV_IN_PROJECT=tre
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 ENV POETRY_HOME=/home/circleci/.poetry
+ENV CARGO_HOME=/home/circleci/.cargo
+ENV PATH="/home/circleci/.cargo/bin/:$PATH"
 RUN pip install --upgrade pip && \
     pip install pipenv==$PIPENV_RELEASE && \
     curl -sSL "https://install.python-poetry.org" | \
-    python - --version=$POETRY_RELEASE
+    python - --version=$POETRY_RELEASE && \
+    curl -LsSf https://astral.sh/uv/$UV_RELEASE/install.sh | sh
 
 # Install Noos CI/CD SDKs
 # -----------------------

@@ -39,6 +39,7 @@ ARG UV_RELEASE="0.3.0"
 ENV PIPENV_VENV_IN_PROJECT=tre
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 ENV POETRY_HOME=/home/circleci/.poetry
+ENV UV_CACHE_DIR=./.uv-cache
 RUN pip install --upgrade pip && \
     pip install pipenv==$PIPENV_RELEASE && \
     pip install uv==$UV_RELEASE && \

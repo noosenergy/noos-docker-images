@@ -39,13 +39,11 @@ ARG UV_RELEASE="0.3.0"
 ENV PIPENV_VENV_IN_PROJECT=tre
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 ENV POETRY_HOME=/home/circleci/.poetry
-ENV CARGO_HOME=/home/circleci/.cargo
-ENV PATH="/home/circleci/.cargo/bin/:$PATH"
 RUN pip install --upgrade pip && \
     pip install pipenv==$PIPENV_RELEASE && \
+    pip install uv==$UV_RELEASE && \
     curl -sSL "https://install.python-poetry.org" | \
-    python - --version=$POETRY_RELEASE && \
-    curl -LsSf https://astral.sh/uv/$UV_RELEASE/install.sh | sh
+    python - --version=$POETRY_RELEASE 
 
 # Install Noos CI/CD SDKs
 # -----------------------

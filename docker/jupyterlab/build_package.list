@@ -1,10 +1,6 @@
 # --- Jupyter dependencies ---
 build-essential
 python3-dev
-# --- nbconvert dependencies ---
-texlive-xetex
-texlive-fonts-recommended
-texlive-plain-generic
 # --- common utilities ---
 git
 tzdata

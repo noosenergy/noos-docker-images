@@ -1,14 +1,18 @@
+# -----------
+# Build stage
+# -----------
+
 # https://github.com/jupyter/docker-stacks
 # https://hub.docker.com/u/jupyter/
-FROM jupyter/base-notebook:python-3.11.4
+FROM jupyter/base-notebook:python-3.11.4 as builder
 
 USER root
 
 # Install Apt packages
 # --------------------
-COPY package.list /tmp/
+COPY build_package.list /tmp/
 RUN apt-get update && \
-    grep -vE '^#' /tmp/package.list | xargs apt-get install -y && \
+    grep -vE '^#' /tmp/build_package.list | xargs apt-get install -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/fontconfig/*
 
@@ -28,20 +32,41 @@ COPY lab/data/. ${CONDA_DIR}/share/jupyter/lab/settings
 # ------------------------------------------------------------------
 COPY config_extensions/. ${HOME}/.jupyter
 
-# Cleanup
-# -------
-RUN rm -rf /tmp/* && \
-    rm -rf ${HOME}/work ${HOME}/.cache ${HOME}/.npm ${HOME}/.yarn && \
-    find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
-    find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete && \
-    fix-permissions $CONDA_DIR
-
 # Build Lab extensions
 # --------------------
-RUN jupyter lab clean && \
-    jupyter lab build --dev-build=False
+RUN jupyter lab build --dev-build=False && \
+    jupyter lab clean 
 
 # Workaround for NOOS-874
+# -----------------------
 RUN conda install backports
+
+# Cleanup
+# -------
+RUN find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
+    find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete && \
+    fix-permissions ${CONDA_DIR} && \
+    fix-permissions ${HOME}/.jupyter
+
+
+# -----------
+# Final stage
+# -----------
+
+FROM jupyter/base-notebook:python-3.11.4
+
+USER root
+
+COPY final_package.list /tmp/
+RUN apt-get update && \
+    grep -vE '^#' /tmp/final_package.list | xargs apt-get install -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /var/cache/fontconfig/*
+
+# Make sure we do not keep old folders/files from the jupyterlab/base-notebook image 
+# (some existing libs were reinstalled with another version by mamba during the build stage)
+RUN rm -rf ${CONDA_DIR} && rm -rf ${HOME}/.jupyter
+COPY --from=builder ${CONDA_DIR} ${CONDA_DIR}
+COPY --from=builder ${HOME}/.jupyter ${HOME}/.jupyter
 
 USER $NB_UID

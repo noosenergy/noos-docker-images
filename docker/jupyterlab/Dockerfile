@@ -4,7 +4,7 @@
 
 # https://github.com/jupyter/docker-stacks
 # https://hub.docker.com/u/jupyter/
-FROM jupyter/base-notebook:python-3.11.4 as builder
+FROM quay.io/jupyter/base-notebook:python-3.11.9 as builder
 
 USER root
 
@@ -37,10 +37,6 @@ COPY config_extensions/. ${HOME}/.jupyter
 RUN jupyter lab build --dev-build=False && \
     jupyter lab clean 
 
-# Workaround for NOOS-874
-# -----------------------
-RUN conda install backports
-
 # Cleanup
 # -------
 RUN find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
@@ -53,7 +49,7 @@ RUN find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
 # Final stage
 # -----------
 
-FROM jupyter/base-notebook:python-3.11.4
+FROM quay.io/jupyter/base-notebook:python-3.11.9
 
 USER root
 

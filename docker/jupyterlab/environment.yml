@@ -2,24 +2,25 @@ name: base
 channels:
   - conda-forge
 dependencies:
+  - nodejs>14 # Needed to have a newer version of nodejs for `jupyter lab build` 
   # metapackages
   - nomkl
   # enforcing numpy 1.*
   - numpy<2.0
   # z2jh setup
-  - notebook>=6.0.0
-  - jupyterlab>=3.0.0
-  - jupyterhub==3.0.0
+  - notebook
+  - jupyterlab<4 # Force downgrade to jupyterlab 3
+  - jupyterhub
   # debugging
   - xeus-python
   # plotting
   - matplotlib
   - plotly
-  - dash>=2,<2.10
-  - ipywidgets>=7.6
-  - ipykernel>=6
+  - dash
+  - ipywidgets
+  - ipykernel
   # extensions
-  - jupyter-dash
+  - jupyterlab_pygments<0.3 # jupyterlab>4 needed for 0.3+ 
   - jupyter-server-proxy
   - jupyterlab-git
   - jupyterlab-code-snippets

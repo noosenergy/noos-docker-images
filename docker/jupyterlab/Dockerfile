@@ -16,10 +16,13 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/fontconfig/*
 
+USER ${NB_UID}
+
 # Install Conda packages
 # ----------------------
 COPY environment.yml /tmp/
-RUN mamba env update -q -f /tmp/environment.yml && \
+RUN umask 002 && \
+    mamba env update -q -f /tmp/environment.yml && \
     mamba clean --all -f -y
 
 # Configure Lab extensions
@@ -34,11 +37,13 @@ COPY config_extensions/. ${HOME}/.jupyter
 
 # Build Lab extensions
 # --------------------
-RUN jupyter lab build --dev-build=False && \
+RUN umask 002 && \
+    jupyter lab build --dev-build=False && \
     jupyter lab clean 
 
 # Cleanup
 # -------
+USER root
 RUN find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
     find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete && \
     fix-permissions ${CONDA_DIR} && \
@@ -65,4 +70,4 @@ RUN rm -rf ${CONDA_DIR} && rm -rf ${HOME}/.jupyter
 COPY --from=builder ${CONDA_DIR} ${CONDA_DIR}
 COPY --from=builder ${HOME}/.jupyter ${HOME}/.jupyter
 
-USER $NB_UID
+USER ${NB_UID}

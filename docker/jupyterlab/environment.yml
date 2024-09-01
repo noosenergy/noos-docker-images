@@ -16,10 +16,11 @@ dependencies:
   # plotting
   - matplotlib
   - plotly
-  - dash
+  - dash>=2,<2.10
   - ipywidgets
   - ipykernel
   # extensions
+  - jupyter-dash
   - jupyterlab_pygments<0.3 # jupyterlab>4 needed for 0.3+ 
   - jupyter-server-proxy
   - jupyterlab-git

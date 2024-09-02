@@ -41,6 +41,10 @@ RUN umask 002 && \
     jupyter lab build --dev-build=False && \
     jupyter lab clean 
 
+# Remove unused kernels
+# ---------------------
+RUN jupyter kernelspec remove xpython xpython-raw -y
+
 # Cleanup
 # -------
 USER root

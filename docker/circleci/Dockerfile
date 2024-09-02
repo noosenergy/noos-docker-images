@@ -1,6 +1,3 @@
-# ARG UV_RELEASE=0.3.0
-# FROM ghcr.io/astral-sh/uv:$UV_RELEASE AS stageforcopy
-
 # https://circleci.com/developer/images/image/cimg/python
 # https://github.com/CircleCI-Public/cimg-python
 # https://hub.docker.com/r/cimg/python
@@ -35,14 +32,13 @@ RUN npm install --global yarn@${YARN_VERSION}
 # -------------------------------
 ARG PIPENV_RELEASE="2023.6.2"
 ARG POETRY_RELEASE="1.5.1"
-ARG UV_RELEASE="0.3.0"
 ENV PIPENV_VENV_IN_PROJECT=true
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 ENV POETRY_HOME=/home/circleci/.poetry
 ENV UV_CACHE_DIR=./.uv-cache
+COPY --from=ghcr.io/astral-sh/uv:0.4.1 /uv /usr/local/bin/uv
 RUN pip install --upgrade pip && \
     pip install pipenv==$PIPENV_RELEASE && \
-    pip install uv==$UV_RELEASE && \
     curl -sSL "https://install.python-poetry.org" | \
     python - --version=$POETRY_RELEASE 
 

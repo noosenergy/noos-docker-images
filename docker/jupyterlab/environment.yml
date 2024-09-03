@@ -11,8 +11,6 @@ dependencies:
   - notebook
   - jupyterlab<4 # Force downgrade to jupyterlab 3
   - jupyterhub
-  # debugging
-  - xeus-python
   # plotting
   - matplotlib
   - plotly

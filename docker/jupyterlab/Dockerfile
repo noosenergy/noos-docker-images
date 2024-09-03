@@ -41,10 +41,6 @@ RUN umask 002 && \
     jupyter lab build --dev-build=False && \
     jupyter lab clean 
 
-# Remove unused XPython kernels
-# ---------------------
-RUN mamba remove xeus -y
-
 # Cleanup
 # -------
 USER root

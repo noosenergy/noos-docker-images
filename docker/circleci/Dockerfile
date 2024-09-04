@@ -37,6 +37,7 @@ ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 ENV POETRY_HOME=/home/circleci/.poetry
 ENV UV_CACHE_DIR=./.uv-cache
 COPY --from=ghcr.io/astral-sh/uv:0.4.1 /uv /usr/local/bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.4.1 /uvx /usr/local/bin/uvx
 RUN pip install --upgrade pip && \
     pip install pipenv==$PIPENV_RELEASE && \
     curl -sSL "https://install.python-poetry.org" | \

@@ -23,11 +23,11 @@ dependencies:
   - jupyterlab-git
   - jupyterlab_templates
   - jupyter-ai
-  - langchain-openai  # Needed for jupyter-ai OpenAI models
-  - langchain-anthropic # Needed for jupyter-ai Anthropic models
   # updating cryptography
   - pyopenssl
   # extras
   - pip
   - pip:
     - jupyterlab-spreadsheet-editor
+    - langchain-openai  # Needed for jupyter-ai OpenAI models
+    - langchain-anthropic # Needed for jupyter-ai Anthropic models

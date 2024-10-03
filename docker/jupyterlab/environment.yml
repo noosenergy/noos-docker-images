@@ -9,24 +9,25 @@ dependencies:
   - numpy<2.0
   # z2jh setup
   - notebook
-  - jupyterlab<4 # Force downgrade to jupyterlab 3
+  - jupyterlab
   - jupyterhub
   # plotting
   - matplotlib
   - plotly
-  - dash>=2,<2.10
+  - dash<3.0
   - ipywidgets
   - ipykernel
   # extensions
-  - jupyter-dash
-  - jupyterlab_pygments<0.3 # jupyterlab>4 needed for 0.3+ 
+  - jupyterlab_pygments
   - jupyter-server-proxy
   - jupyterlab-git
-  - jupyterlab-code-snippets
-  - jupyterlab_templates<0.5 # jupyterlab>4 needed for 0.5+
+  - jupyterlab_templates
+  - jupyter-ai
+  - langchain-openai  # Needed for jupyter-ai OpenAI models
+  - langchain-anthropic # Needed for jupyter-ai Anthropic models
   # updating cryptography
   - pyopenssl
   # extras
   - pip
   - pip:
-    - jupyterlab-spreadsheet-editor<0.7 # jupyterlab>4 needed for 0.7+
+    - jupyterlab-spreadsheet-editor

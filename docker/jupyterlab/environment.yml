@@ -22,12 +22,12 @@ dependencies:
   - jupyter-server-proxy
   - jupyterlab-git
   - jupyterlab_templates
-  - jupyter-ai
   # updating cryptography
   - pyopenssl
   # extras
   - pip
   - pip:
     - jupyterlab-spreadsheet-editor
+    - jupyter-ai
     - langchain-openai  # Needed for jupyter-ai OpenAI models
     - langchain-anthropic # Needed for jupyter-ai Anthropic models

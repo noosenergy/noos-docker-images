@@ -26,7 +26,7 @@ case "$1" in
         pg_dump -d $PGDB -p $PGPORT -U $PGUSER -h $PGHOST --exclude-table-data=$PGIGNORE -- | gzip > $TMP_FILE
 
         echo "$(date) - uploading file ${TMP_FILE} to ${DATABASE_BUCKET}"
-        S3_URL="s3://${DATABASE_BUCKET}/${PGDB}/${TMP_FILE}"
+        S3_URL="s3://${DATABASE_BUCKET}/${TMP_FILE}"
         aws s3 cp $TMP_FILE $S3_URL > /dev/null
         ;;
 

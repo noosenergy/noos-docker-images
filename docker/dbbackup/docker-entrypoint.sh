@@ -23,7 +23,7 @@ case "$1" in
     backup-to-s3)
         echo "$(date) - dumping ${PGDB} from host: ${PGHOST}"
         TMP_FILE="$(date +%Y-%m-%d).sql.gz"
-        pg_dump -d $PGDB -p $PGPORT -U $PGUSER -h $PGHOST --exclude-table-data=$PGIGNORE -- | gzip > $TMP_FILE
+        pg_dump -d $PGDB -p $PGPORT -U $PGUSER -h $PGHOST --exclude-table-data=$PGIGNORE | gzip > $TMP_FILE
 
         echo "$(date) - uploading file ${TMP_FILE} to ${DATABASE_BUCKET}"
         S3_URL="s3://${DATABASE_BUCKET}/${TMP_FILE}"

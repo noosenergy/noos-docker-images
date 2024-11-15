@@ -57,6 +57,7 @@ jobs:
 
   build_image_jupyterlab:
     executor: noos-ci/default
+    resource_class: large
     steps:
       - checkout
       - noos-ci/docker_buildx_image:

@@ -28,7 +28,7 @@ filters:
 # ----------------
 
 orbs:
-  noos-ci: noosenergy/noos-ci@0.2.3
+  noos-ci: noosenergy/noos-ci@0.4.0
 
 # -------------
 # Pipeline jobs
@@ -64,6 +64,7 @@ jobs:
           image_context: ./docker/jupyterlab
           image_name: jupyterlab
           image_tag: ${CIRCLE_SHA1}
+          no_output_timeout: 30m
 
   build_image_pyscript:
     executor: noos-ci/default

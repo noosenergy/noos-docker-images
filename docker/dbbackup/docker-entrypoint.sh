@@ -14,7 +14,8 @@ PGDB=${DATABASE_NAME:-postgres}
 PGUSER=${DATABASE_USER:-postgres}
 PGHOST=${DATABASE_HOST:-localhost}
 PGPORT=${DATABASE_PORT:-5432}
-PGIGNORE=${DATABASE_BACKUP_IGNORE_REGEX:-""}
+PGIGNORE_TABLE=${DATABASE_BACKUP_IGNORE_TABLE_REGEX:-""}
+PGIGNORE_CONTENT=${DATABASE_BACKUP_IGNORE_CONTENT_REGEX:-""}
 # https://www.postgresql.org/docs/10/libpq-envars.html
 export PGPASSWORD=$DATABASE_PASSWORD
 
@@ -23,7 +24,7 @@ case "$1" in
     backup-to-s3)
         echo "$(date) - dumping ${PGDB} from host: ${PGHOST}"
         TMP_FILE="$(date +%Y-%m-%d).sql.gz"
-        pg_dump -d $PGDB -p $PGPORT -U $PGUSER -h $PGHOST --exclude-table-data=$PGIGNORE | gzip > $TMP_FILE
+        pg_dump -d $PGDB -p $PGPORT -U $PGUSER -h $PGHOST --exclude-table=$PGIGNORE_TABLE --exclude-table-data=$PGIGNORE_CONTENT | gzip > $TMP_FILE
 
         echo "$(date) - uploading file ${TMP_FILE} to ${DATABASE_BUCKET}"
         S3_URL="s3://${DATABASE_BUCKET}/${TMP_FILE}"

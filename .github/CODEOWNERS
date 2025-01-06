@@ -1,6 +1,6 @@
 # Default repo code owners for branch protections
 
-* @noosenergy/admin
+* @noosenergy/dev @noosenergy/admin
 
 /docker/jupyterlab/ @noosenergy/data @noosenergy/dev @noosenergy/admin
 

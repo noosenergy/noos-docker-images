@@ -1,6 +1,12 @@
 # https://circleci.com/developer/images/image/cimg/python
 # https://github.com/CircleCI-Public/cimg-python
 # https://hub.docker.com/r/cimg/python
+FROM node:18.18-alpine AS builder
+
+ARG YARN_VERSION="v1.22.19"
+
+RUN npm install --global --force yarn@${YARN_VERSION}
+
 FROM cimg/python:3.13.1
 
 USER root
@@ -19,14 +25,12 @@ RUN apt-get update && \
 
 # Install Node.js
 # ---------------
-ARG NODE_VERSION="v18.18.0"
-RUN curl -sSL "https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.xz" | \
-    tar -xJ -C /usr/local --strip-components=1
+# Copy Node.js and Yarn from the builder stage
+COPY --from=builder /usr/local/bin/node /usr/local/bin/node
+COPY --from=builder /usr/local/bin/npm /usr/local/bin/npm
+COPY --from=builder /usr/local/bin/yarn /usr/local/bin/yarn
+COPY --from=builder /usr/local/lib/node_modules /usr/local/lib/node_modules
 
-# Install JavaScript package manager
-# ----------------------------------
-ARG YARN_VERSION="v1.22.19"
-RUN npm install --global yarn@${YARN_VERSION}
 
 # Install Python package managers
 # -------------------------------

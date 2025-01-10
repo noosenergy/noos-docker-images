@@ -1,7 +1,7 @@
 # https://circleci.com/developer/images/image/cimg/python
 # https://github.com/CircleCI-Public/cimg-python
 # https://hub.docker.com/r/cimg/python
-FROM cimg/python:3.11.4
+FROM cimg/python:3.13.1
 
 USER root
 
@@ -41,7 +41,7 @@ COPY --from=ghcr.io/astral-sh/uv:0.4.1 /uvx /usr/local/bin/uvx
 RUN pip install --upgrade pip && \
     pip install pipenv==$PIPENV_RELEASE && \
     curl -sSL "https://install.python-poetry.org" | \
-    python - --version=$POETRY_RELEASE 
+    python - --version=$POETRY_RELEASE
 
 # Install Noos CI/CD SDKs
 # -----------------------

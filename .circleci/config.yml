@@ -97,7 +97,8 @@ workflows:
 
   build_image_circleci:
     jobs:
-      - build_image_circleci
+      - build_image_circleci:
+          context: DOCKERHUB_SHARED
 
   build_image_dbbackup:
     jobs:

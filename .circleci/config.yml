@@ -39,11 +39,12 @@ jobs:
     executor: noos-ci/default
     steps:
       - checkout
-      - noos-ci/docker_build_image:
+      - noos-ci/docker_buildx_image:
           registry_provider: docker
           image_context: ./docker/circleci
           image_name: circleci
-          image_tag: ${CIRCLE_SHA1}
+          image_tag: 3.13.1
+          image_tag_only: true
 
   build_image_dbbackup:
     executor: noos-ci/default
@@ -96,10 +97,7 @@ workflows:
 
   build_image_circleci:
     jobs:
-      - hold:
-          <<: *hold_master_only
-      - build_image_circleci:
-          <<: *manual_build_master_only
+      - build_image_circleci
 
   build_image_dbbackup:
     jobs:

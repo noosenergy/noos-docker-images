@@ -1,7 +1,12 @@
 # https://circleci.com/developer/images/image/cimg/python
 # https://github.com/CircleCI-Public/cimg-python
 # https://hub.docker.com/r/cimg/python
-FROM cimg/python:3.11.4
+
+# The Node.js image is multi-architecture, so by using a separate Node.js image,
+# we can ensure that the Node.js version is compatible with the chosen target architecture of the final stage.
+FROM node:18.18 AS builder
+
+FROM cimg/python:3.12.8
 
 USER root
 
@@ -19,14 +24,20 @@ RUN apt-get update && \
 
 # Install Node.js
 # ---------------
-ARG NODE_VERSION="v18.18.0"
-RUN curl -sSL "https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.xz" | \
-    tar -xJ -C /usr/local --strip-components=1
+# Copy Node.js from the builder stage.
+COPY --from=builder /usr/local/bin/node /usr/local/bin/node
+COPY --from=builder /usr/local/bin/npm /usr/local/bin/npm
+COPY --from=builder /usr/local/lib/node_modules /usr/local/lib/node_modules
+
+# Reconfigure npm path
+RUN rm /usr/local/bin/npm
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
 # Install JavaScript package manager
 # ----------------------------------
 ARG YARN_VERSION="v1.22.19"
 RUN npm install --global yarn@${YARN_VERSION}
+
 
 # Install Python package managers
 # -------------------------------
@@ -41,12 +52,12 @@ COPY --from=ghcr.io/astral-sh/uv:0.4.1 /uvx /usr/local/bin/uvx
 RUN pip install --upgrade pip && \
     pip install pipenv==$PIPENV_RELEASE && \
     curl -sSL "https://install.python-poetry.org" | \
-    python - --version=$POETRY_RELEASE 
+    python - --version=$POETRY_RELEASE
 
 # Install Noos CI/CD SDKs
 # -----------------------
-ARG NOOSINV_VERSION="0.0.18"
-ARG NOOSTF_VERSION="0.0.8"
+ARG NOOSINV_VERSION="0.0.19"
+ARG NOOSTF_VERSION="0.0.9"
 RUN pip install noos-inv==$NOOSINV_VERSION noos-tf==$NOOSTF_VERSION
 
 WORKDIR /home/circleci/project

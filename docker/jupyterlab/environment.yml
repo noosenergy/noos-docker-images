@@ -22,14 +22,13 @@ dependencies:
   - jupyter-server-proxy
   - jupyterlab-git
   - jupyterlab_templates
-  - jupyterlab-code-snippets
+  #  - jupyterlab-code-snippets
   # updating cryptography
   - pyopenssl
   # extras
   - pip
   - pip:
     - jupyterlab-spreadsheet-editor
-    - jupyter-ai
     - langchain-openai  # Needed for jupyter-ai OpenAI models
-    - langchain-anthropic # Needed for jupyter-ai Anthropic models
     - jupyterlab-retrieve-base-url # Needed to infer proxy settings inside the hub
+    - /tmp/jupyterlab-code-snippets # Install from source

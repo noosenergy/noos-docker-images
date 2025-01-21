@@ -20,6 +20,12 @@ USER ${NB_UID}
 
 # Install Conda packages
 # ----------------------
+RUN git clone https://github.com/jupytercalpoly/jupyterlab-code-snippets /tmp/jupyterlab-code-snippets
+RUN sed -i 's/\^/>=/g' /tmp/jupyterlab-code-snippets/package.json
+RUN sed -i 's/\~/>=/g' /tmp/jupyterlab-code-snippets/package.json
+    
+# Install Conda packages
+# ----------------------
 COPY environment.yml /tmp/
 RUN umask 002 && \
     mamba env update -q -f /tmp/environment.yml && \
@@ -40,6 +46,15 @@ COPY config_extensions/. /home/${NB_USER}/.jupyter
 RUN umask 002 && \
     jupyter lab build --dev-build=False && \
     jupyter lab clean 
+
+# RUN git clone https://github.com/jupytercalpoly/jupyterlab-code-snippets /tmp/jupyterlab-code-snippets
+# RUN sed -i 's/\^/>=/g' /tmp/jupyterlab-code-snippets/package.json
+# RUN sed -i 's/\~/>=/g' /tmp/jupyterlab-code-snippets/package.json
+# RUN pip install /tmp/jupyterlab-code-snippets
+
+# RUN umask 002 && \
+#     jupyter lab build --dev-build=False && \
+#     jupyter lab clean 
 
 # Cleanup
 # -------

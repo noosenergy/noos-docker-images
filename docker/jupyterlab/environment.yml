@@ -32,4 +32,3 @@ dependencies:
     - jupyter-ai
     - langchain-openai  # Needed for jupyter-ai OpenAI models
     - langchain-anthropic # Needed for jupyter-ai Anthropic models
-    - jupyterlab-retrieve-base-url # Needed to infer proxy settings inside the hub

@@ -4,7 +4,7 @@
 
 # https://github.com/jupyter/docker-stacks
 # https://hub.docker.com/u/jupyter/
-FROM quay.io/jupyter/base-notebook:python-3.11.9 as builder
+FROM quay.io/jupyter/base-notebook:python-3.12.8 as builder
 
 USER root
 
@@ -39,7 +39,7 @@ COPY config_extensions/. /home/${NB_USER}/.jupyter
 # --------------------
 RUN umask 002 && \
     jupyter lab build --dev-build=False && \
-    jupyter lab clean 
+    jupyter lab clean
 
 # Cleanup
 # -------
@@ -54,7 +54,7 @@ RUN find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
 # Final stage
 # -----------
 
-FROM quay.io/jupyter/base-notebook:python-3.11.9
+FROM quay.io/jupyter/base-notebook:python-3.12.8
 
 USER root
 
@@ -64,7 +64,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/fontconfig/*
 
-# Make sure we do not keep old folders/files from the jupyterlab/base-notebook image 
+# Make sure we do not keep old folders/files from the jupyterlab/base-notebook image
 # (some existing libs were reinstalled with another version by mamba during the build stage)
 RUN rm -rf ${CONDA_DIR} && rm -rf /home/${NB_USER}/.jupyter
 COPY --from=builder ${CONDA_DIR} ${CONDA_DIR}

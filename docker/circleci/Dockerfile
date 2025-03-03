@@ -18,8 +18,14 @@ ARG GECKODRIVER_VERSION="v0.33.0"
 COPY mozilla-firefox /etc/apt/preferences.d/
 RUN apt-get update && \
     add-apt-repository ppa:mozillateam/ppa -y && \
-    apt install firefox && \
-    curl -sSL "https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz" | \
+    apt install -y firefox && \
+    # Determine the correct binary URL based on the architecture
+    if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then \
+        GECKO_OS="linux-aarch64"; \
+    else \
+        GECKO_OS="linux64"; \
+    fi && \
+    curl -sSL "https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-${GECKO_OS}.tar.gz" | \
     tar -xzv -C /usr/local/bin
 
 # Install Node.js

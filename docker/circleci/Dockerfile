@@ -10,23 +10,50 @@ FROM cimg/python:3.12.8
 
 USER root
 
-# Provision Selenium (Firefox)
-# Change package source to install Firefox .deb instead of snap, as snap is now the default
-# Install geckodriver
-# ----------------------------
-ARG GECKODRIVER_VERSION="v0.33.0"
-COPY mozilla-firefox /etc/apt/preferences.d/
-RUN apt-get update && \
-    add-apt-repository ppa:mozillateam/ppa -y && \
-    apt install -y firefox && \
-    # Determine the correct binary URL based on the architecture
-    if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then \
-        GECKO_OS="linux-aarch64"; \
+# Provision Selenium (Firefox + GeckoDriver)
+
+#==============================
+# Firefox Nightly installation
+#==============================
+ARG FIREFOX_VERSION="nightly-latest"
+# Determine the correct OS string for Firefox
+RUN if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then \
+        FIREFOX_OS="linux-aarch64"; \
+        FIREFOX_VERSION="nightly-latest"; \
     else \
-        GECKO_OS="linux64"; \
+        FIREFOX_OS="linux64"; \
+        FIREFOX_VERSION="latest"; \
     fi && \
-    curl -sSL "https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-${GECKO_OS}.tar.gz" | \
-    tar -xzv -C /usr/local/bin
+    apt-get update -qqy && \
+    apt-get -qqy --no-install-recommends install \
+        libavcodec-extra \
+        libgtk-3-dev \
+        libdbus-glib-1-dev \
+        libasound2 \
+        xz-utils && \
+    curl -sSL "https://download.mozilla.org/?product=firefox-${FIREFOX_VERSION}-ssl&os=${FIREFOX_OS}&lang=en-US" | \
+    tar xJv -C /usr/lib/ && \
+    ln -fs /usr/lib/firefox/firefox /usr/bin/firefox && \
+    rm -rf /var/lib/apt/lists/*
+
+#==============================
+# GeckoDriver
+#
+# SOURCE: docker-selenium/NodeFirefox
+# https://github.com/SeleniumHQ/docker-selenium/blob/70ac588d567b253c93c91d990a5b197f5f8d146a/NodeFirefox/Dockerfile#L66
+#==============================
+ARG GECKODRIVER_VERSION="latest"
+RUN LATEST_VERSION=$(curl -sk https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.tag_name') \
+    && DRIVER_ARCH=$(if [ "$(dpkg --print-architecture)" = "amd64" ]; then echo "linux64"; else echo "linux-aarch64"; fi) \
+    && GK_VERSION=$(if [ ${GECKODRIVER_VERSION:-latest} = "latest" ]; then echo "${LATEST_VERSION}"; else echo $GECKODRIVER_VERSION; fi) \
+    && wget --no-verbose -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/${GK_VERSION}/geckodriver-${GK_VERSION}-${DRIVER_ARCH}.tar.gz \
+    && rm -rf /opt/geckodriver \
+    && tar -C /opt -zxf /tmp/geckodriver.tar.gz \
+    && rm /tmp/geckodriver.tar.gz \
+    && mv /opt/geckodriver /opt/geckodriver-$GK_VERSION \
+    && chmod 755 /opt/geckodriver-$GK_VERSION \
+    && ln -fs /opt/geckodriver-$GK_VERSION /usr/bin/geckodriver
+
 
 # Install Node.js
 # ---------------

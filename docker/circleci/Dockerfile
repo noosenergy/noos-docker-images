@@ -91,6 +91,7 @@ RUN pip install --upgrade pip && \
 ARG NOOSINV_VERSION="0.2.4"
 ARG NOOSTF_VERSION="0.0.9"
 RUN pip install noos-inv==$NOOSINV_VERSION noos-tf==$NOOSTF_VERSION
+RUN noosinv --print-completion-script=bash >> /home/circleci/.bashrc
 
 WORKDIR /home/circleci/project
 USER circleci

@@ -23,12 +23,26 @@ case "$1" in
 
     backup-to-s3)
         echo "$(date) - dumping ${PGDB} from host: ${PGHOST}"
-        TMP_FILE="$(date +%Y-%m-%d).sql.gz"
-        pg_dump -d $PGDB -p $PGPORT -U $PGUSER -h $PGHOST --exclude-table=$PGIGNORE_TABLE --exclude-table-data=$PGIGNORE_CONTENT | gzip > $TMP_FILE
+        DATE_SUFFIX="$(date +%Y-%m-%d)"
+        set -- "$@" -d $PGDB -p $PGPORT -U $PGUSER -h $PGHOST
+        set -- "$@" --exclude-table=$PGIGNORE_TABLE
+        set -- "$@" --exclude-table-data=$PGIGNORE_CONTENT
+
+        # Compressed plain SQL backup, to use with psql -f
+        TMP_FILE="${DATE_SUFFIX}.sql.gz"
+        pg_dump "$@" | gzip > $TMP_FILE
+
+        # Custom-format binary backup, to use with pg_restore
+        TMP_BACKUP_FILE="${DATE_SUFFIX}.dump"
+        pg_dump -Fc "$@" -f $TMP_BACKUP_FILE
 
         echo "$(date) - uploading file ${TMP_FILE} to ${DATABASE_BUCKET}"
         S3_URL="s3://${DATABASE_BUCKET}/${TMP_FILE}"
         aws s3 cp $TMP_FILE $S3_URL > /dev/null
+
+        echo "$(date) - uploading file ${TMP_BACKUP_FILE} to ${DATABASE_BUCKET}"
+        S3_URL="s3://${DATABASE_BUCKET}/${TMP_BACKUP_FILE}"
+        aws s3 cp $TMP_BACKUP_FILE $S3_URL > /dev/null
         ;;
 
     *)

@@ -22,6 +22,8 @@ export PGPASSWORD=$DATABASE_PASSWORD
 case "$1" in
 
     backup-to-s3)
+        shift # Remove the first argument from $@
+
         echo "$(date) - dumping ${PGDB} from host: ${PGHOST}"
         DATE_SUFFIX="$(date +%Y-%m-%d)"
         set -- "$@" -d $PGDB -p $PGPORT -U $PGUSER -h $PGHOST

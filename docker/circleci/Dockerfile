@@ -88,8 +88,8 @@ RUN pip install --upgrade pip && \
 
 # Install Noos CI/CD SDKs
 # -----------------------
-ARG NOOSINV_VERSION="0.2.10"
-ARG NOOSTF_VERSION="0.0.9"
+ARG NOOSINV_VERSION="0.3.0"
+ARG NOOSTF_VERSION="0.1.0"
 RUN pip install noos-inv==$NOOSINV_VERSION noos-tf==$NOOSTF_VERSION
 RUN noosinv --print-completion-script=bash >> /home/circleci/.bashrc
 

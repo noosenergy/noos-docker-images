@@ -6,7 +6,7 @@
 # we can ensure that the Node.js version is compatible with the chosen target architecture of the final stage.
 FROM node:18.18 AS builder
 
-FROM cimg/python:3.12.8
+FROM cimg/python:3.12
 
 USER root
 

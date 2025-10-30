@@ -6,7 +6,7 @@
 # we can ensure that the Node.js version is compatible with the chosen target architecture of the final stage.
 FROM node:18.18 AS builder
 
-FROM cimg/python:3.12.8
+FROM cimg/python:3.12
 
 USER root
 
@@ -72,24 +72,16 @@ ARG YARN_VERSION="v1.22.19"
 RUN npm install --global yarn@${YARN_VERSION}
 
 
-# Install Python package managers
+# Install UV Python package manager
 # -------------------------------
-ARG PIPENV_RELEASE="2023.6.2"
-ARG POETRY_RELEASE="1.5.1"
-ENV PIPENV_VENV_IN_PROJECT=true
-ENV POETRY_VIRTUALENVS_IN_PROJECT=true
-ENV POETRY_HOME=/home/circleci/.poetry
 ENV UV_CACHE_DIR=./.uv-cache
-COPY --from=ghcr.io/astral-sh/uv:0.7.13 /uv /uvx /usr/local/bin/
-RUN pip install --upgrade pip && \
-    pip install pipenv==$PIPENV_RELEASE && \
-    curl -sSL "https://install.python-poetry.org" | \
-    python - --version=$POETRY_RELEASE
+COPY --from=ghcr.io/astral-sh/uv:0.9.5 /uv /uvx /usr/local/bin/
+RUN pip install --upgrade pip
 
 # Install Noos CI/CD SDKs
 # -----------------------
-ARG NOOSINV_VERSION="0.2.10"
-ARG NOOSTF_VERSION="0.0.9"
+ARG NOOSINV_VERSION="0.3.0"
+ARG NOOSTF_VERSION="0.1.0"
 RUN pip install noos-inv==$NOOSINV_VERSION noos-tf==$NOOSTF_VERSION
 RUN noosinv --print-completion-script=bash >> /home/circleci/.bashrc
 

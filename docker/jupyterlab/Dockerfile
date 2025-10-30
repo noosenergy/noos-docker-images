@@ -3,8 +3,8 @@
 # -----------
 
 # https://github.com/jupyter/docker-stacks
-# https://hub.docker.com/u/jupyter/
-FROM quay.io/jupyter/base-notebook:python-3.12.8 as builder
+# https://quay.io/repository/jupyter/base-notebook
+FROM quay.io/jupyter/base-notebook:python-3.12 as builder
 
 USER root
 
@@ -54,7 +54,7 @@ RUN find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
 # Final stage
 # -----------
 
-FROM quay.io/jupyter/base-notebook:python-3.12.8
+FROM quay.io/jupyter/base-notebook:python-3.12
 
 USER root
 

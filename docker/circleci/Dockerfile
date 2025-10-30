@@ -72,19 +72,11 @@ ARG YARN_VERSION="v1.22.19"
 RUN npm install --global yarn@${YARN_VERSION}
 
 
-# Install Python package managers
+# Install UV Python package manager
 # -------------------------------
-ARG PIPENV_RELEASE="2023.6.2"
-ARG POETRY_RELEASE="1.5.1"
-ENV PIPENV_VENV_IN_PROJECT=true
-ENV POETRY_VIRTUALENVS_IN_PROJECT=true
-ENV POETRY_HOME=/home/circleci/.poetry
 ENV UV_CACHE_DIR=./.uv-cache
-COPY --from=ghcr.io/astral-sh/uv:0.7.13 /uv /uvx /usr/local/bin/
-RUN pip install --upgrade pip && \
-    pip install pipenv==$PIPENV_RELEASE && \
-    curl -sSL "https://install.python-poetry.org" | \
-    python - --version=$POETRY_RELEASE
+COPY --from=ghcr.io/astral-sh/uv:0.9.5 /uv /uvx /usr/local/bin/
+RUN pip install --upgrade pip
 
 # Install Noos CI/CD SDKs
 # -----------------------

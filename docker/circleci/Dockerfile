@@ -74,8 +74,9 @@ RUN npm install --global yarn@${YARN_VERSION}
 
 # Install UV Python package manager
 # -------------------------------
+ARG UV_VERSION="0.9.5"
 ENV UV_CACHE_DIR=./.uv-cache
-RUN curl -LsSf https://astral.sh/uv/0.9.5/install.sh | sh
+RUN curl -LsSf https://astral.sh/uv/${UV_VERSION}/install.sh | sh
 RUN pip install --upgrade pip
 
 # Install Noos CI/CD SDKs

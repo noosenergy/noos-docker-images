@@ -55,32 +55,57 @@ RUN LATEST_VERSION=$(curl -sk https://api.github.com/repos/mozilla/geckodriver/r
     && ln -fs /opt/geckodriver-$GK_VERSION /usr/bin/geckodriver
 
 
+#==============================
+# Helm installation
+#==============================
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 \
+    && chmod 700 get_helm.sh \
+    && ./get_helm.sh \
+    && rm get_helm.sh
+
+#==============================
+# Kubeconform installation
+#==============================
+ARG KUBECONFORM_VERSION="v0.7.0"
+RUN DRIVER_ARCH=$(dpkg --print-architecture) \
+    && DRIVER_OS=$(echo ${TARGETPLATFORM:-linux/amd64} | cut -d'/' -f1) \
+    && wget --no-verbose -O /tmp/kubeconform.tar.gz https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-${DRIVER_OS}-${DRIVER_ARCH}.tar.gz \
+    && rm -rf /opt/kubeconform \
+    && tar -C /opt -zxf /tmp/kubeconform.tar.gz \
+    && rm /tmp/kubeconform.tar.gz \
+    && mv /opt/kubeconform /opt/kubeconform-$KUBECONFORM_VERSION \
+    && chmod 755 /opt/kubeconform-$KUBECONFORM_VERSION \
+    && ln -fs /opt/kubeconform-$KUBECONFORM_VERSION /usr/bin/kubeconform
+
+#==============================
 # Install Node.js
-# ---------------
+#
 # Copy Node.js from the builder stage.
+#==============================
 COPY --from=builder /usr/local/bin/node /usr/local/bin/node
 COPY --from=builder /usr/local/bin/npm /usr/local/bin/npm
 COPY --from=builder /usr/local/lib/node_modules /usr/local/lib/node_modules
-
 # Reconfigure npm path
 RUN rm /usr/local/bin/npm
 RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
+#==============================
 # Install JavaScript package manager
-# ----------------------------------
+#==============================
 ARG YARN_VERSION="v1.22.19"
 RUN npm install --global yarn@${YARN_VERSION}
 
-
+#==============================
 # Install UV Python package manager
-# -------------------------------
+#==============================
 ARG UV_VERSION="0.9.5"
 ENV UV_CACHE_DIR=./.uv-cache
 RUN curl -LsSf https://astral.sh/uv/${UV_VERSION}/install.sh | sh
 RUN pip install --upgrade pip
 
+#==============================
 # Install Noos CI/CD SDKs
-# -----------------------
+#==============================
 ARG NOOSINV_VERSION="0.3.0"
 ARG NOOSTF_VERSION="0.1.0"
 RUN pip install noos-inv==$NOOSINV_VERSION noos-tf==$NOOSTF_VERSION

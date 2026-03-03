@@ -28,7 +28,16 @@ dependencies:
   # extras
   - pip
   - pip:
-    - jupyterlab-spreadsheet-editor
-    - jupyter-ai
-    - langchain-openai  # Needed for jupyter-ai OpenAI models
-    - langchain-anthropic # Needed for jupyter-ai Anthropic models
+      - dash-material-components>=2.0.8
+      - fsspec[s3]>=2024.6.1
+      - jupyterlab-spreadsheet-editor
+      - jupyter-ai
+      - langchain-openai # Needed for jupyter-ai OpenAI models
+      - langchain-anthropic # Needed for jupyter-ai Anthropic models
+      - marimo
+      - marimo-jupyter-extension
+      - altair>=6.0.0
+      - ruff>=0.14.11
+      - python-lsp-ruff>=2.3.0
+      - python-lsp-server>=1.14.0
+      - polars>=1.38.1

@@ -31,8 +31,8 @@ RUN umask 002 && \
 COPY lab/config/. ${CONDA_DIR}/etc/jupyter/labconfig
 COPY lab/data/. ${CONDA_DIR}/share/jupyter/lab/settings
 
-# Configure Jupyterlab extensions (nbconvert & jupyterlab-templates)
-# ------------------------------------------------------------------
+# Configure Jupyterlab extensions
+# -------------------------------
 COPY config_extensions/. /home/${NB_USER}/.jupyter
 
 # Build Lab extensions

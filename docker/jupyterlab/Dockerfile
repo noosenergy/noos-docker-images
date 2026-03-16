@@ -73,5 +73,6 @@ RUN apt-get update && \
 RUN rm -rf ${CONDA_DIR} && rm -rf /home/${NB_USER}/.jupyter
 COPY --from=builder ${CONDA_DIR} ${CONDA_DIR}
 COPY --from=builder /home/${NB_USER}/.jupyter /home/${NB_USER}/.jupyter
+COPY --from=builder /home/${NB_USER}/.config/marimo /home/${NB_USER}/.config/marimo
 
 USER ${NB_UID}

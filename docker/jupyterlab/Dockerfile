@@ -43,7 +43,7 @@ RUN umask 002 && \
 
 # Configure marimo
 # --------------------
-COPY marimo/marimo.toml/. /home/${NB_USER}/.config/marimo/
+COPY marimo/marimo.toml /home/${NB_USER}/.config/marimo/
 
 # Cleanup
 # -------

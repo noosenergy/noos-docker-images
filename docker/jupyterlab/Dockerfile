@@ -41,6 +41,10 @@ RUN umask 002 && \
     jupyter lab build --dev-build=False && \
     jupyter lab clean
 
+# Configure marimo
+# --------------------
+COPY marimo/marimo.toml/. /home/${NB_USER}/.config/marimo/
+
 # Cleanup
 # -------
 USER root

@@ -3,18 +3,21 @@
 # https://hub.docker.com/r/cimg/python
 
 # The Node.js image is multi-architecture, so by using a separate Node.js image,
-# we can ensure that the Node.js version is compatible with the chosen target architecture of the final stage.
+# one can ensure that the Node.js version is compatible with the chosen target architecture.
 FROM node:18.18 AS builder
 
 FROM cimg/python:3.12
 
+LABEL maintainer="Noos Energy <contact@noos.energy>"
+
 USER root
 
-# Provision Selenium (Firefox + GeckoDriver)
+# ---------------------
+# Provision web drivers
+# ---------------------
 
-#==============================
-# Firefox Nightly installation
-#==============================
+# Install Firefox Nightly
+# -----------------------
 ARG FIREFOX_VERSION="nightly-latest"
 # Determine the correct OS string for Firefox
 RUN if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then \
@@ -36,13 +39,11 @@ RUN if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then \
     ln -fs /usr/lib/firefox/firefox /usr/bin/firefox && \
     rm -rf /var/lib/apt/lists/*
 
-#==============================
-# GeckoDriver
-#
-# SOURCE: docker-selenium/NodeFirefox
-# https://github.com/SeleniumHQ/docker-selenium/blob/70ac588d567b253c93c91d990a5b197f5f8d146a/NodeFirefox/Dockerfile#L66
-#==============================
+# Install GeckoDriver
+# -------------------
 ARG GECKODRIVER_VERSION="latest"
+# Source: docker-selenium/NodeFirefox
+# https://github.com/SeleniumHQ/docker-selenium/blob/70ac588d567b253c93c91d990a5b197f5f8d146a/NodeFirefox/Dockerfile#L66
 RUN LATEST_VERSION=$(curl -sk https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.tag_name') \
     && DRIVER_ARCH=$(if [ "$(dpkg --print-architecture)" = "amd64" ]; then echo "linux64"; else echo "linux-aarch64"; fi) \
     && GK_VERSION=$(if [ ${GECKODRIVER_VERSION:-latest} = "latest" ]; then echo "${LATEST_VERSION}"; else echo $GECKODRIVER_VERSION; fi) \
@@ -54,18 +55,19 @@ RUN LATEST_VERSION=$(curl -sk https://api.github.com/repos/mozilla/geckodriver/r
     && chmod 755 /opt/geckodriver-$GK_VERSION \
     && ln -fs /opt/geckodriver-$GK_VERSION /usr/bin/geckodriver
 
+# -----------------------------
+# Provision devops dependencies
+# -----------------------------
 
-#==============================
-# Helm installation
-#==============================
+# Install Helm
+# ------------
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 \
     && chmod 700 get_helm.sh \
     && ./get_helm.sh \
     && rm get_helm.sh
 
-#==============================
-# Kubeconform installation
-#==============================
+# Install Kubeconform
+# -------------------
 ARG KUBECONFORM_VERSION="v0.7.0"
 RUN DRIVER_ARCH=$(dpkg --print-architecture) \
     && DRIVER_OS=$(echo ${TARGETPLATFORM:-linux/amd64} | cut -d'/' -f1) \
@@ -77,11 +79,13 @@ RUN DRIVER_ARCH=$(dpkg --print-architecture) \
     && chmod 755 /opt/kubeconform-$KUBECONFORM_VERSION \
     && ln -fs /opt/kubeconform-$KUBECONFORM_VERSION /usr/bin/kubeconform
 
-#==============================
+# -------------------------
+# Provision CI/CD pipelines
+# -------------------------
+
 # Install Node.js
-#
+# ---------------
 # Copy Node.js from the builder stage.
-#==============================
 COPY --from=builder /usr/local/bin/node /usr/local/bin/node
 COPY --from=builder /usr/local/bin/npm /usr/local/bin/npm
 COPY --from=builder /usr/local/lib/node_modules /usr/local/lib/node_modules
@@ -89,23 +93,20 @@ COPY --from=builder /usr/local/lib/node_modules /usr/local/lib/node_modules
 RUN rm /usr/local/bin/npm
 RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
-#==============================
 # Install JavaScript package manager
-#==============================
+# ----------------------------------
 ARG YARN_VERSION="v1.22.19"
 RUN npm install --global yarn@${YARN_VERSION}
 
-#==============================
 # Install UV Python package manager
-#==============================
+# ---------------------------------
 ARG UV_VERSION="0.9.5"
 ENV UV_CACHE_DIR=./.uv-cache
 RUN curl -LsSf https://astral.sh/uv/${UV_VERSION}/install.sh | sh
 RUN pip install --upgrade pip
 
-#==============================
 # Install Noos CI/CD SDKs
-#==============================
+# -----------------------
 ARG NOOSINV_VERSION="0.5.0"
 ARG NOOSTF_VERSION="0.1.0"
 RUN pip install noos-inv==$NOOSINV_VERSION noos-tf==$NOOSTF_VERSION

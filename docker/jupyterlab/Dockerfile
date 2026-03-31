@@ -60,6 +60,8 @@ RUN find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
 
 FROM quay.io/jupyter/base-notebook:python-3.12
 
+LABEL maintainer="Noos Energy <contact@noos.energy>"
+
 USER root
 
 COPY final_package.list /tmp/

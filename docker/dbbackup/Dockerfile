@@ -1,5 +1,7 @@
 FROM debian:bullseye
 
+LABEL maintainer="Noos Energy <contact@noos.energy>"
+
 USER root
 
 # Install Apt-packages

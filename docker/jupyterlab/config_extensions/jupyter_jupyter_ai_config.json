@@ -1,5 +1,0 @@
-{
-    "AiExtension": {
-        "allowed_providers": ["openai", "openai-chat", "anthropic", "anthropic-chat"]
-    }
-}

@@ -68,7 +68,7 @@ RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/s
 
 # Install Kubeconform
 # -------------------
-ARG KUBECONFORM_VERSION="v0.7.0"
+ARG KUBECONFORM_VERSION="v0.8.0"
 RUN DRIVER_ARCH=$(dpkg --print-architecture) \
     && DRIVER_OS=$(echo ${TARGETPLATFORM:-linux/amd64} | cut -d'/' -f1) \
     && wget --no-verbose -O /tmp/kubeconform.tar.gz https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-${DRIVER_OS}-${DRIVER_ARCH}.tar.gz \
@@ -107,7 +107,7 @@ RUN pip install --upgrade pip
 
 # Install Noos CI/CD SDKs
 # -----------------------
-ARG NOOSINV_VERSION="0.5.0"
+ARG NOOSINV_VERSION="0.5.1"
 ARG NOOSTF_VERSION="0.1.0"
 RUN pip install noos-inv==$NOOSINV_VERSION noos-tf==$NOOSTF_VERSION
 RUN noosinv --print-completion-script=bash >> /home/circleci/.bashrc

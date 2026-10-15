@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:trixie
 
 LABEL maintainer="Noos Energy <contact@noos.energy>"
 
@@ -35,16 +35,11 @@ RUN wget $AWS_URL \
 # Install PostgreSQL-client
 # -------------------------
 # https://www.postgresql.org/download/linux/debian
-ARG PG_DEPS=" \
-    postgresql-client-18 \
-    "
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
-    && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-    && mkdir -p /usr/share/man/man1 \
-    && mkdir -p /usr/share/man/man7 \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends $PG_DEPS \
-    && rm -rf /var/lib/apt/lists/*
+ARG PG_DEPS="postgresql-client-18"
+RUN apt-get install -y postgresql-common && \
+    DEBIAN_FRONTEND=noninteractive YES=yes \
+    /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+RUN apt-get update && apt-get install -y --no-install-recommends $PG_DEPS && rm -rf /var/lib/apt/lists/*
 
 # Install config files
 # --------------------
